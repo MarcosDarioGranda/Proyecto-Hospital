@@ -1,6 +1,7 @@
 #include "funcionesMenu.h"
 #include "../bd/sqlite3.h"
 #include <stdio.h>
+#include "menus.h"
 #include <time.h>
 
 //Para ejecutar cada consulta/modificación
@@ -41,9 +42,11 @@ void iniciarSesion() {
 
     if (sqlite3_step(stmt) == SQLITE_ROW && sqlite3_column_int(stmt, 0) > 0) {
         printf("Inicio de sesión exitoso\n");
+        menuOpciones();
         
     } else {
         printf("Usuario o contraseña incorrectos\n");
+        menuInicioSesion();
     }
     sqlite3_finalize(stmt);
     sqlite3_close(db);
@@ -70,10 +73,4 @@ void registrarInicioSesion(const char *usuario) {
     // Escribir en el archivo
     fprintf(archivo, "Usuario: %s | Hora: %s\n", usuario, buffer);
     fclose(archivo);
-}
-
-
-int main(void){
-    iniciarSesion();
-    return 0;
 }

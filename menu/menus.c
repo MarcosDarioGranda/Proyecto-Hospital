@@ -4,7 +4,7 @@
 #include "funcionesMenu.h"
 
 // Función para iniciar sesión
-int menuInicioSesion() {
+void menuInicioSesion() {
     int opcion;
     do {
         printf("\n----------- Bienvenido/a ------------\n");
@@ -17,18 +17,20 @@ int menuInicioSesion() {
             printf("\n[Inicio de Sesion] Ingrese su ID y contrasenya...\n");
             // TODO - Implementar autenticación
             char nom[10];
-            printf("Intruduzca su nombre: ");
-            sscanf("%d", &nom);
-            registrarInicioSesion(nom);
-            return 1;  // Retorna 1 si el usuario inicia sesión
+            //printf("Intruduzca su nombre: ");
+            //sscanf("%d", &nom);
+            //registrarInicioSesion(nom);
+            //return 1;  // Retorna 1 si el usuario inicia sesión
+            iniciarSesion();
+            
         } else if (opcion == 2) {
             printf("\nSaliendo del sistema...\n");
-            return 0;  // Retorna 0 para salir
+            //return 0;  // Retorna 0 para salir
         } else {
             printf("\nOpcion no valida. Intente de nuevo.\n");
         }
     } while (opcion != 2);
-    return 0;
+    //return 0;
 }
 
 void menuOpciones() {

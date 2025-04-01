@@ -11,5 +11,5 @@ typedef struct {
 }Usuario;
 
 void menuOpciones();
-int menuInicioSesion();
+void menuInicioSesion();
 #endif
