@@ -2,9 +2,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "funcionesMenu.h"
+#include "usuario.h"
 
 // Función para iniciar sesión
-int menuInicioSesion() {
+void menuInicioSesion() {
     int opcion;
     do {
         printf("\n----------- Bienvenido/a ------------\n");
@@ -16,14 +17,15 @@ int menuInicioSesion() {
         if (opcion == 1) {
             printf("\n[Inicio de Sesion] Ingrese su ID y contrasenya...\n");
             // TODO - Implementar autenticación
-            char nom[10];
+            /*char nom[10];
             printf("Intruduzca su nombre: ");
             sscanf("%d", &nom);
-            registrarInicioSesion(nom);
-            return 1;  // Retorna 1 si el usuario inicia sesión
+            registrarInicioSesion(nom);*/
+            iniciarSesion();
+            //return 1;  // Retorna 1 si el usuario inicia sesión
         } else if (opcion == 2) {
             printf("\nSaliendo del sistema...\n");
-            return 0;  // Retorna 0 para salir
+            //return 0;  // Retorna 0 para salir
         } else {
             printf("\nOpcion no valida. Intente de nuevo.\n");
         }
@@ -76,6 +78,8 @@ void menuGestionPacientes() {
         switch (opcion) {
             case 1:
                 printf("\n[Agregar Paciente] Ingrese los datos del paciente...\n");
+
+
                 break;
             case 2:
                 printf("\n[Buscar Paciente] Ingrese el ID del paciente...\n");

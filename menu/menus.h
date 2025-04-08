@@ -1,6 +1,5 @@
 #ifndef MENUS_H_
 #define MENUS_H_
-#include "menus.h"
 
 typedef struct {
     int id;
@@ -10,6 +9,11 @@ typedef struct {
     int tContra;
 }Usuario;
 
+
+void menuInicioSesion();
 void menuOpciones();
-int menuInicioSesion();
+void menuGestionPacientes();
+void menuGestionCitas();
+void menuGestionHistorial();
+
 #endif

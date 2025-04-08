@@ -1,6 +1,5 @@
 #ifndef MENUS_H_
 #define MENUS_H_
-#include "funcionesMenu.h"
 #include  "../bd/sqlite3.h"
 typedef struct {
     int dni;
