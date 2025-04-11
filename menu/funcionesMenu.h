@@ -10,7 +10,7 @@ typedef struct {
     char especialidad[50];
 } UsuarioInicio;
 
-void inicio();
+void iniciarSesion();
 void ejecutarSQL(sqlite3* db, const char* sql);
 void registrarInicioSesion(const char *usuario);
 

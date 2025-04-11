@@ -1,4 +1,5 @@
 #include "menus.h"
+#include "log.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include "funcionesMenu.h"
@@ -16,21 +17,25 @@ void menuInicioSesion() {
 
         if (opcion == 1) {
             printf("\n[Inicio de Sesion] Ingrese su ID y contrasenya...\n");
+            escribirLog("Inicio de sesion."); //Se escribe el log en el fichero
             // TODO - Implementar autenticación
-            /*char nom[10];
-            printf("Intruduzca su nombre: ");
-            sscanf("%d", &nom);
-            registrarInicioSesion(nom);*/
-            iniciarSesion();
+            char nom[10];
+            //printf("Intruduzca su nombre: ");
+            //sscanf("%d", &nom);
+            //registrarInicioSesion(nom);
             //return 1;  // Retorna 1 si el usuario inicia sesión
+            iniciarSesion();
+            
         } else if (opcion == 2) {
             printf("\nSaliendo del sistema...\n");
             //return 0;  // Retorna 0 para salir
+            
+
         } else {
             printf("\nOpcion no valida. Intente de nuevo.\n");
         }
     } while (opcion != 2);
-    return 0;
+    //return 0;
 }
 
 void menuOpciones() {
@@ -56,6 +61,7 @@ void menuOpciones() {
                 break;
             case 4:
                 printf("\n[Cierre de Sesion] Ha cerrado sesion correctamente.\n");
+                escribirLog("Cierre de sesion."); //Se escribe el log en el fichero
                 return;
             default:
                 printf("\nOpcion no valida. Intente de nuevo.\n");
