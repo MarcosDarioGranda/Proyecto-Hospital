@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "../menu/menus.h"
-#include "../menu/menus.h"
 
 int main(void) {
     menuInicioSesion();
