@@ -2,3 +2,6 @@
 [2025-04-01 20:27:03] Cierre de sesion.
 [2025-04-01 20:30:35] Inicio de sesion.
 [2025-04-01 20:31:07] Cierre de sesion.
+[2025-04-23 13:05:29] Inicio de sesion.
+[2025-04-23 13:20:13] Inicio de sesion.
+[2025-04-23 13:20:27] Inicio de sesion.

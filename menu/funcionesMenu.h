@@ -12,6 +12,6 @@ typedef struct {
 
 void iniciarSesion();
 void ejecutarSQL(sqlite3* db, const char* sql);
-void registrarInicioSesion(const char *usuario);
+//void registrarInicioSesion(const char *usuario);
 
 #endif

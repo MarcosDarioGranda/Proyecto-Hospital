@@ -3,7 +3,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "funcionesMenu.h"
-#include "usuario.h"
 
 // Función para iniciar sesión
 void menuInicioSesion() {
