@@ -105,6 +105,7 @@ void menuGestionPacientes() {
                 break;
             case 4:
                 printf("\n[Eliminar Paciente] Ingrese el ID del paciente a eliminar...\n");
+                eliminarPaciente(db);
                 break;
             case 5:
                 return;

@@ -147,7 +147,7 @@ void modificarPaciente(sqlite3 *db) {
         sqlite3_finalize(stmt);
         return;
     }
-    
+
     // Nuevos datos
     char nuevo_nombre[21];
     char nueva_fecha[11];
@@ -181,6 +181,58 @@ void modificarPaciente(sqlite3 *db) {
         printf("Paciente actualizado correctamente.\n");
     } else {
         printf("Error al actualizar paciente: %s\n", sqlite3_errmsg(db));
+    }
+
+    sqlite3_finalize(stmt);
+}
+
+void eliminarPaciente(sqlite3 *db) {
+    int id;
+    printf("Ingrese el ID del paciente a eliminar: ");
+    scanf("%d", &id);
+
+    // Comprobamos si existe
+    const char *sql_check = "SELECT nombre FROM Paciente WHERE id = ?;";
+    sqlite3_stmt *stmt;
+
+    if (sqlite3_prepare_v2(db, sql_check, -1, &stmt, NULL) != SQLITE_OK) {
+        printf("Error al preparar consulta: %s\n", sqlite3_errmsg(db));
+        return;
+    }
+
+    sqlite3_bind_int(stmt, 1, id);
+
+    if (sqlite3_step(stmt) != SQLITE_ROW) {
+        printf("No se encontró ningún paciente con ID %d.\n", id);
+        sqlite3_finalize(stmt);
+        return;
+    }
+
+    char *nombre;
+    strcpy(nombre, sqlite3_column_text(stmt, 0));
+    sqlite3_finalize(stmt);
+
+    printf("¿Está seguro que desea eliminar al paciente '%s'? (s/n): ", nombre);
+    char confirm;
+    scanf(" %c", &confirm);
+
+    if (confirm != 's' && confirm != 'S') {
+        printf("Operación cancelada.\n");
+        return;
+    }
+
+    const char *sql_delete = "DELETE FROM Paciente WHERE id = ?;";
+    if (sqlite3_prepare_v2(db, sql_delete, -1, &stmt, NULL) != SQLITE_OK) {
+        printf("Error preparando DELETE: %s\n", sqlite3_errmsg(db));
+        return;
+    }
+
+    sqlite3_bind_int(stmt, 1, id);
+
+    if (sqlite3_step(stmt) == SQLITE_DONE) {
+        printf("Paciente eliminado correctamente.\n");
+    } else {
+        printf("Error al eliminar paciente: %s\n", sqlite3_errmsg(db));
     }
 
     sqlite3_finalize(stmt);

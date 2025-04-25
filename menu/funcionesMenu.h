@@ -16,6 +16,7 @@ void ejecutarSQL(sqlite3* db, const char* sql);
 void agregarPaciente(sqlite3 *db);
 void buscarPaciente(sqlite3 *db);
 void modificarPaciente(sqlite3 *db);
+void eliminarPaciente(sqlite3 *db);
 //void registrarInicioSesion(const char *usuario);
 
 #endif

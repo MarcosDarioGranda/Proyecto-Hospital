@@ -21,3 +21,9 @@
 [2025-04-25 13:00:28] Cierre de sesion.
 [2025-04-25 13:09:06] Inicio de sesion.
 [2025-04-25 13:10:15] Cierre de sesion.
+[2025-04-25 13:15:40] Inicio de sesion.
+[2025-04-25 13:16:47] Cierre de sesion.
+[2025-04-25 13:18:46] Inicio de sesion.
+[2025-04-25 13:19:37] Cierre de sesion.
+[2025-04-25 13:23:15] Inicio de sesion.
+[2025-04-25 13:23:39] Cierre de sesion.
