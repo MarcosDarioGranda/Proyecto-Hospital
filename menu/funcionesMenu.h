@@ -12,6 +12,9 @@ typedef struct {
 
 void iniciarSesion();
 void ejecutarSQL(sqlite3* db, const char* sql);
+//Funciones Gestion de Pacientes
+void agregarPaciente(sqlite3 *db);
+void buscarPaciente(sqlite3 *db);
 //void registrarInicioSesion(const char *usuario);
 
 #endif

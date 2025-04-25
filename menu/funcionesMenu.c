@@ -3,8 +3,11 @@
 #include "../bd/sqlite3.h"
 #include "log.h"
 #include <stdio.h>
+#include <stdlib.h>
 #include "menus.h"
 #include <time.h>
+#include "../entidades/paciente.h"
+#include <string.h>
 
 //Para ejecutar cada consulta/modificación
 void ejecutarSQL(sqlite3* db, const char* sql) {
@@ -88,4 +91,37 @@ void agregarPaciente(sqlite3 *db) {
     } else {
         printf("Paciente agregado correctamente.\n");
     }
+}
+
+void buscarPaciente(sqlite3 *db) {
+    int id;
+    printf("Ingrese el ID del paciente: ");
+    scanf("%d", &id);
+
+    const char *sql = "SELECT id, nombre, fecha_nac, dir, TF FROM Paciente WHERE id = ?;";
+    sqlite3_stmt *stmt;
+
+    if (sqlite3_prepare_v2(db, sql, -1, &stmt, NULL) != SQLITE_OK) {
+        printf("Error al preparar la consulta: %s\n", sqlite3_errmsg(db));
+        return;
+    }
+
+    sqlite3_bind_int(stmt, 1, id);
+
+    if (sqlite3_step(stmt) == SQLITE_ROW) {
+        printf("\n--- Datos del Paciente ---\n");
+        //Hacer con una funcion de imprimir Paciente
+        Paciente* p = (Paciente*) malloc(sizeof(Paciente));
+        p->id = sqlite3_column_int(stmt, 0);
+        strcpy(p->nombre,sqlite3_column_text(stmt, 1));
+        strcpy(p->fecha_nac, sqlite3_column_text(stmt, 2));
+        strcpy(p->direccion, sqlite3_column_text(stmt, 3));
+        p->tlfn = sqlite3_column_int(stmt, 4);
+        imprimirPaciente(*p);
+        free(p);
+    } else {
+        printf("No se encontró ningún paciente con ID %d.\n", id);
+    }
+
+    sqlite3_finalize(stmt);
 }

@@ -97,6 +97,7 @@ void menuGestionPacientes() {
                 break;
             case 2:
                 printf("\n[Buscar Paciente] Ingrese el ID del paciente...\n");
+                buscarPaciente(db);
                 break;
             case 3:
                 printf("\n[Modificar Paciente] Ingrese el ID del paciente a modificar...\n");
@@ -110,7 +111,7 @@ void menuGestionPacientes() {
                 printf("\nOpcion no valida. Intente de nuevo.\n");
         }
     } while (opcion != 5);
-    
+
     sqlite3_close(db);
 }
 
