@@ -42,8 +42,10 @@ void iniciarSesion() {
 
     if (sqlite3_step(stmt) == SQLITE_ROW && sqlite3_column_int(stmt, 0) > 0) {
         printf("Inicio de sesión exitoso\n");
+        sqlite3_finalize(stmt);
+        sqlite3_close(db);
         menuOpciones();
-
+        return;
         
         
         
