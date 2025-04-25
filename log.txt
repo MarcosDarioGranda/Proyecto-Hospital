@@ -5,3 +5,13 @@
 [2025-04-23 13:05:29] Inicio de sesion.
 [2025-04-23 13:20:13] Inicio de sesion.
 [2025-04-23 13:20:27] Inicio de sesion.
+[2025-04-25 12:18:41] Inicio de sesion.
+[2025-04-25 12:18:51] Inicio de sesion.
+[2025-04-25 12:20:01] Cierre de sesion.
+[2025-04-25 12:21:25] Inicio de sesion.
+[2025-04-25 12:22:51] Inicio de sesion.
+[2025-04-25 12:26:49] Cierre de sesion.
+[2025-04-25 12:27:40] Inicio de sesion.
+[2025-04-25 12:28:48] Cierre de sesion.
+[2025-04-25 12:29:10] Inicio de sesion.
+[2025-04-25 12:32:16] Cierre de sesion.

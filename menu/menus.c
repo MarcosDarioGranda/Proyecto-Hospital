@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "funcionesMenu.h"
+#include "../bd/sqlite3.h"
 
 // Función para iniciar sesión
 void menuInicioSesion() {
@@ -70,6 +71,13 @@ void menuOpciones() {
 
 void menuGestionPacientes() {
     int opcion;
+
+    sqlite3 *db;
+    if (sqlite3_open("BD_HOSPITAL", &db) != SQLITE_OK) {
+        printf("No se pudo abrir la base de datos.\n");
+        return;
+    }
+
     do {
         printf("\n------- GESTION DE PACIENTES -------\n");
         printf("1. Agregar Paciente\n");
@@ -80,10 +88,11 @@ void menuGestionPacientes() {
         printf("Seleccione una opcion: ");
         scanf("%d", &opcion);
 
+
         switch (opcion) {
             case 1:
                 printf("\n[Agregar Paciente] Ingrese los datos del paciente...\n");
-
+                agregarPaciente(db);
 
                 break;
             case 2:
@@ -101,6 +110,8 @@ void menuGestionPacientes() {
                 printf("\nOpcion no valida. Intente de nuevo.\n");
         }
     } while (opcion != 5);
+    
+    sqlite3_close(db);
 }
 
 void menuGestionCitas() {
