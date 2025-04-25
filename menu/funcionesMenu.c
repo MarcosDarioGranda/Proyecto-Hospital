@@ -125,3 +125,63 @@ void buscarPaciente(sqlite3 *db) {
 
     sqlite3_finalize(stmt);
 }
+
+void modificarPaciente(sqlite3 *db) {
+    int id;
+    printf("Ingrese el ID del paciente a modificar: ");
+    scanf("%d", &id);
+
+    // Comprobar si existe
+    const char *sql_select = "SELECT nombre, fecha_nac, dir, TF FROM Paciente WHERE id = ?;";
+    sqlite3_stmt *stmt;
+
+    if (sqlite3_prepare_v2(db, sql_select, -1, &stmt, NULL) != SQLITE_OK) {
+        printf("Error al preparar consulta SELECT: %s\n", sqlite3_errmsg(db));
+        return;
+    }
+
+    sqlite3_bind_int(stmt, 1, id);
+
+    if (sqlite3_step(stmt) != SQLITE_ROW) {
+        printf("No se encontró ningún paciente con ID %d.\n", id);
+        sqlite3_finalize(stmt);
+        return;
+    }
+    
+    // Nuevos datos
+    char nuevo_nombre[21];
+    char nueva_fecha[11];
+    char nueva_dir[31];
+    int nuevo_tf;
+
+    printf("\n--- Ingrese los nuevos datos ---\n");
+    printf("Nuevo Nombre (max 20 caracteres): ");
+    scanf(" %[^\n]", nuevo_nombre);
+    printf("Nueva Fecha de nacimiento (YYYY-MM-DD): ");
+    scanf(" %[^\n]", nueva_fecha);
+    printf("Nueva Dirección (max 30 caracteres): ");
+    scanf(" %[^\n]", nueva_dir);
+    printf("Nuevo Teléfono: ");
+    scanf("%d", &nuevo_tf);
+
+    // Actualizar
+    const char *sql_update = "UPDATE Paciente SET nombre = ?, fecha_nac = ?, dir = ?, TF = ? WHERE id = ?;";
+    if (sqlite3_prepare_v2(db, sql_update, -1, &stmt, NULL) != SQLITE_OK) {
+        printf("Error al preparar UPDATE: %s\n", sqlite3_errmsg(db));
+        return;
+    }
+
+    sqlite3_bind_text(stmt, 1, nuevo_nombre, -1, SQLITE_STATIC);
+    sqlite3_bind_text(stmt, 2, nueva_fecha, -1, SQLITE_STATIC);
+    sqlite3_bind_text(stmt, 3, nueva_dir, -1, SQLITE_STATIC);
+    sqlite3_bind_int(stmt, 4, nuevo_tf);
+    sqlite3_bind_int(stmt, 5, id);
+
+    if (sqlite3_step(stmt) == SQLITE_DONE) {
+        printf("Paciente actualizado correctamente.\n");
+    } else {
+        printf("Error al actualizar paciente: %s\n", sqlite3_errmsg(db));
+    }
+
+    sqlite3_finalize(stmt);
+}
