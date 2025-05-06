@@ -1,5 +1,5 @@
-#ifndef MENUS_H_
-#define MENUS_H_
+#ifndef FUNCIONESMENU_H_
+#define FUNCIONESMENU_H_
 #include  "../bd/sqlite3.h"
 typedef struct {
     int dni;
@@ -17,6 +17,8 @@ void agregarPaciente(sqlite3 *db);
 void buscarPaciente(sqlite3 *db);
 void modificarPaciente(sqlite3 *db);
 void eliminarPaciente(sqlite3 *db);
-//void registrarInicioSesion(const char *usuario);
+//Funciones Gestion de Citas
+void consultarCitasPorPaciente(sqlite3 *db);
+void consultarCitasPorMedico(sqlite3 *db);
 
 #endif

@@ -119,35 +119,47 @@ void menuGestionPacientes() {
 
 void menuGestionCitas() {
     int opcion;
+    sqlite3 *db;
+    if (sqlite3_open("BD_HOSPITAL", &db) != SQLITE_OK) {
+        printf("No se pudo abrir la base de datos.\n");
+        return;
+    }
+
     do {
         printf("\n-------- GESTION DE CITAS --------\n");
-        printf("1. Consultar Citas\n");
-        printf("2. Agregar Cita\n");
-        printf("3. Modificar Cita\n");
-        printf("4. Eliminar Cita\n");
-        printf("5. Volver al Menu Principal\n");
+        printf("1. Consultar Citas de Paciente\n");
+        printf("2. Consultar Citas por Medico\n");
+        printf("3. Agregar Cita\n");
+        printf("4. Modificar Cita\n");
+        printf("5. Eliminar Cita\n");
+        printf("6. Volver al Menu Principal\n");
         printf("Seleccione una opcion: ");
         scanf("%d", &opcion);
 
         switch (opcion) {
             case 1:
-                printf("\n[Consultar Citas] Mostrando citas programadas...\n");
+                consultarCitasPorPaciente(db);
                 break;
             case 2:
-                printf("\n[Agregar Cita] Ingrese los datos de la nueva cita...\n");
+                consultarCitasPorMedico(db);
                 break;
             case 3:
-                printf("\n[Modificar Cita] Ingrese el ID de la cita a modificar...\n");
+                printf("\n[Agregar Cita] Ingrese los datos de la nueva cita...\n");
                 break;
             case 4:
-                printf("\n[Eliminar Cita] Ingrese el ID de la cita a eliminar...\n");
+                printf("\n[Modificar Cita] Ingrese el ID de la cita a modificar...\n");
                 break;
             case 5:
+                printf("\n[Eliminar Cita] Ingrese el ID de la cita a eliminar...\n");
+                break;
+            case 6:
                 return;
             default:
                 printf("\nOpcion no valida. Intente de nuevo.\n");
         }
-    } while (opcion != 5);
+    } while (opcion != 6);
+    sqlite3_close(db);
+
 }
 
 void menuGestionHistorial() {

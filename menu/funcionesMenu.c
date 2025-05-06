@@ -7,6 +7,7 @@
 #include "menus.h"
 #include <time.h>
 #include "../entidades/paciente.h"
+#include "../entidades/cita.h"
 #include <string.h>
 
 //Para ejecutar cada consulta/modificación
@@ -236,4 +237,78 @@ void eliminarPaciente(sqlite3 *db) {
     }
 
     sqlite3_finalize(stmt);
+}
+
+void consultarCitasPorPaciente(sqlite3 *db){
+    int id;
+    printf("Ingrese el ID del paciente de el que mostrar las citas:\n");
+    scanf("%d", &id);
+
+    const char* sql = "SELECT id, paciente_id, fecha, medico_id, estado FROM Cita WHERE paciente_id = ?;";
+    sqlite3_stmt* stmt;
+
+    if (sqlite3_prepare_v2(db, sql, -1, &stmt, NULL) != SQLITE_OK) {
+        printf("Error preparando la consulta: %s\n", sqlite3_errmsg(db));
+        return;
+    }
+
+    sqlite3_bind_int(stmt, 1, id);
+
+    int encontrado = 0;
+    while (sqlite3_step(stmt) == SQLITE_ROW) {
+        Cita cita;
+        cita.idCita = sqlite3_column_int(stmt, 0);
+        cita.idPaciente = sqlite3_column_int(stmt, 1);
+        strncpy(cita.fecha, (const char*)sqlite3_column_text(stmt, 2), sizeof(cita.fecha));
+        cita.fecha[10] = '\0';  // aseguramos terminación
+        cita.idMedico = sqlite3_column_int(stmt, 3);
+        strncpy(cita.estado, (const char*)sqlite3_column_text(stmt, 4), sizeof(cita.estado));
+        cita.estado[sizeof(cita.estado) - 1] = '\0';
+
+        imprimirCita(cita);
+        encontrado = 1;
+    }
+
+    sqlite3_finalize(stmt);
+
+    if (!encontrado) {
+        printf("No se encontraron citas para el paciente con ID %d.\n", id);
+    }
+}
+
+void consultarCitasPorMedico(sqlite3 *db) {
+    int id;
+    printf("Ingrese el ID del medico del que quiere ver las citas:\n");
+    scanf("%d", &id);
+
+    const char* sql = "SELECT id, paciente_id, fecha, medico_id, estado FROM Cita WHERE medico_id = ?;";
+    sqlite3_stmt* stmt;
+
+    if (sqlite3_prepare_v2(db, sql, -1, &stmt, NULL) != SQLITE_OK) {
+        printf("Error preparando la consulta: %s\n", sqlite3_errmsg(db));
+        return;
+    }
+
+    sqlite3_bind_int(stmt, 1, id);
+
+    int encontrado = 0;
+    while (sqlite3_step(stmt) == SQLITE_ROW) {
+        Cita cita;
+        cita.idCita = sqlite3_column_int(stmt, 0);
+        cita.idPaciente = sqlite3_column_int(stmt, 1);
+        strncpy(cita.fecha, (const char*)sqlite3_column_text(stmt, 2), sizeof(cita.fecha));
+        cita.fecha[sizeof(cita.fecha) - 1] = '\0';
+        cita.idMedico = sqlite3_column_int(stmt, 3);
+        strncpy(cita.estado, (const char*)sqlite3_column_text(stmt, 4), sizeof(cita.estado));
+        cita.estado[sizeof(cita.estado) - 1] = '\0';
+
+        imprimirCitaMedico(cita);
+        encontrado = 1;
+    }
+
+    sqlite3_finalize(stmt);
+
+    if (!encontrado) {
+        printf("No se encontraron citas para el medico con ID %d.\n", id);
+    }
 }

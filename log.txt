@@ -27,3 +27,16 @@
 [2025-04-25 13:19:37] Cierre de sesion.
 [2025-04-25 13:23:15] Inicio de sesion.
 [2025-04-25 13:23:39] Cierre de sesion.
+[2025-05-06 19:52:07] Inicio de sesion.
+[2025-05-06 19:52:19] Inicio de sesion.
+[2025-05-06 19:55:02] Inicio de sesion.
+[2025-05-06 20:43:34] Inicio de sesion.
+[2025-05-06 20:46:08] Cierre de sesion.
+[2025-05-06 20:46:26] Inicio de sesion.
+[2025-05-06 20:53:13] Cierre de sesion.
+[2025-05-06 20:53:37] Inicio de sesion.
+[2025-05-06 21:00:19] Cierre de sesion.
+[2025-05-06 21:09:11] Inicio de sesion.
+[2025-05-06 21:09:38] Cierre de sesion.
+[2025-05-06 21:10:14] Inicio de sesion.
+[2025-05-06 21:12:18] Inicio de sesion.
