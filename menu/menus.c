@@ -144,20 +144,25 @@ void menuGestionCitas() {
                 consultarCitasPorMedico(db);
                 break;
             case 3:
-                printf("\n[Agregar Cita] Ingrese los datos de la nueva cita...\n");
+                agregarCita(db);
                 break;
             case 4:
-                printf("\n[Modificar Cita] Ingrese el ID de la cita a modificar...\n");
+                modificarCita(db);
                 break;
             case 5:
-                printf("\n[Eliminar Cita] Ingrese el ID de la cita a eliminar...\n");
+               eliminarCita(db);
                 break;
             case 6:
+            printf("\nVolviendo al Menu Principal...\n");
                 return;
             default:
                 printf("\nOpcion no valida. Intente de nuevo.\n");
         }
     } while (opcion != 6);
+
+    printf("\nPresione Enter para continuar...\n");
+    getchar(); // Espera a que el usuario presione Enter
+    
     sqlite3_close(db);
 
 }

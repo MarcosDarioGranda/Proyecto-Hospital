@@ -20,5 +20,9 @@ void eliminarPaciente(sqlite3 *db);
 //Funciones Gestion de Citas
 void consultarCitasPorPaciente(sqlite3 *db);
 void consultarCitasPorMedico(sqlite3 *db);
-
+int verificarPacienteExiste(sqlite3 *db, int idPaciente);
+int verificarMedicoExiste(sqlite3 *db, int idMedico);
+void agregarCita(sqlite3 *db);
+void modificarCita(sqlite3 *db);
+void eliminarCita(sqlite3 *db);
 #endif

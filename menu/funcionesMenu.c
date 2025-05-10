@@ -239,6 +239,8 @@ void eliminarPaciente(sqlite3 *db) {
     sqlite3_finalize(stmt);
 }
 
+//Método que busca todas las citas que un paciente tiene. Se escribe un ID/DNI de paciente, y se devuelve una lista de todas las citas 
+//que tiene un paciente.
 void consultarCitasPorPaciente(sqlite3 *db){
     int id;
     printf("Ingrese el ID del paciente de el que mostrar las citas:\n");
@@ -269,13 +271,18 @@ void consultarCitasPorPaciente(sqlite3 *db){
         encontrado = 1;
     }
 
-    sqlite3_finalize(stmt);
+   
 
     if (!encontrado) {
         printf("No se encontraron citas para el paciente con ID %d.\n", id);
     }
+    printf("\nPresione Enter para volver al menú...\n");
+    getchar(); // Espera que el usuario presione Enter
+    sqlite3_finalize(stmt);
 }
 
+//Función que consulta las citas que tiene un Médico. Se escribe el ID, devuelve una lista con todas las citas en
+//las que participa
 void consultarCitasPorMedico(sqlite3 *db) {
     int id;
     printf("Ingrese el ID del medico del que quiere ver las citas:\n");
@@ -306,9 +313,284 @@ void consultarCitasPorMedico(sqlite3 *db) {
         encontrado = 1;
     }
 
-    sqlite3_finalize(stmt);
+    
 
     if (!encontrado) {
         printf("No se encontraron citas para el medico con ID %d.\n", id);
     }
+    printf("\nPresione Enter para volver al menú...\n");
+    getchar(); // Espera que el usuario presione Enter
+    sqlite3_finalize(stmt);
+}
+
+
+//Función utilizada para verificar si un paciente existe. Se utiliza en agregarcita() para a la hora de agregar una cita,
+//asegurarse de que el paciente exista (su ID) (Obviamente no puedes pedir una cita para un paciente que no existe)
+
+int verificarPacienteExiste(sqlite3 *db, int idPaciente) {
+    const char *sql = "SELECT id FROM Paciente;";
+    sqlite3_stmt *stmt;
+    int existe = 0;
+
+    if (sqlite3_prepare_v2(db, sql, -1, &stmt, NULL) != SQLITE_OK) {
+        printf("Error preparando verificación de paciente: %s\n", sqlite3_errmsg(db));
+        return 0;
+    }
+
+    while (sqlite3_step(stmt) == SQLITE_ROW) {
+        int id = sqlite3_column_int(stmt, 0);
+        if (id == idPaciente) {
+            existe = 1;
+            break;
+        }
+    }
+
+    sqlite3_finalize(stmt);
+    return existe;
+}
+//lo mismo pero para un medico
+int verificarMedicoExiste(sqlite3 *db, int idMedico) {
+    const char *sql = "SELECT id FROM Medico;";
+    sqlite3_stmt *stmt;
+    int existe = 0;
+
+    if (sqlite3_prepare_v2(db, sql, -1, &stmt, NULL) != SQLITE_OK) {
+        printf("Error preparando verificación de médico: %s\n", sqlite3_errmsg(db));
+        return 0;
+    }
+
+    while (sqlite3_step(stmt) == SQLITE_ROW) {
+        int id = sqlite3_column_int(stmt, 0);
+        if (id == idMedico) {
+            existe = 1;
+            break;
+        }
+    }
+
+    sqlite3_finalize(stmt);
+    return existe;
+}
+
+//Funcion que añade una cita, dandole los parametros y usando las 2 funciones anteriores para que verificar que el
+//id de medico y paciente existen.
+void agregarCita(sqlite3 *db) {
+    int idPaciente, idMedico;
+    char fecha[11];
+    char estado[20];
+
+    // Verificar paciente
+    do {
+        printf("Ingrese el ID del paciente: ");
+        scanf("%d", &idPaciente);
+
+        if (!verificarPacienteExiste(db, idPaciente)) {
+            printf("Paciente no encontrado. Intentalo de nuevo.\n");
+        } else {
+            break;
+        }
+    } while (1);
+
+    // Verificar médico
+    do {
+        printf("Ingrese el ID del medico: ");
+        scanf("%d", &idMedico);
+
+        if (!verificarMedicoExiste(db, idMedico)) {
+            printf("Medico no encontrado. Intentalo de nuevo.\n");
+        } else {
+            break;
+        }
+    } while (1);
+
+    // Leer fecha
+    printf("Ingrese la fecha de la cita (YYYY-MM-DD): ");
+    scanf("%s", fecha);
+
+    // Leer estado
+    printf("Ingrese el estado de la cita (ej: Programada): ");
+    scanf("%s", estado);
+
+    const char *sql = "INSERT INTO Cita (paciente_id, fecha, medico_id, estado) VALUES (?, ?, ?, ?);";
+    sqlite3_stmt *stmt;
+
+    if (sqlite3_prepare_v2(db, sql, -1, &stmt, NULL) != SQLITE_OK) {
+        printf("Error preparando la insercion: %s\n", sqlite3_errmsg(db));
+        return;
+    }
+
+    sqlite3_bind_int(stmt, 1, idPaciente);
+    sqlite3_bind_text(stmt, 2, fecha, -1, SQLITE_STATIC);
+    sqlite3_bind_int(stmt, 3, idMedico);
+    sqlite3_bind_text(stmt, 4, estado, -1, SQLITE_STATIC);
+
+    if (sqlite3_step(stmt) == SQLITE_DONE) {
+        printf("Cita agregada correctamente.\n");
+    } else {
+        printf("Error al agregar cita: %s\n", sqlite3_errmsg(db));
+    }
+
+    sqlite3_finalize(stmt);
+}
+
+
+
+//Metodo que permite cambiar una cita (SOLO la fecha, el estado y el médico si quieres)
+void modificarCita(sqlite3 *db) {
+    int idCita;
+    sqlite3_stmt *stmt;
+
+    // Pedir ID y verificar que exista
+    while (1) {
+        printf("Ingrese el ID de la cita que desea modificar: ");
+        scanf("%d", &idCita);
+
+        const char *sqlCheck = "SELECT id, paciente_id, fecha, medico_id, estado FROM Cita WHERE id = ?";
+        if (sqlite3_prepare_v2(db, sqlCheck, -1, &stmt, NULL) != SQLITE_OK) {
+            printf("Error preparando la consulta: %s\n", sqlite3_errmsg(db));
+            return;
+        }
+
+        sqlite3_bind_int(stmt, 1, idCita);
+        //en caso de q exista
+        if (sqlite3_step(stmt) == SQLITE_ROW) {
+            // se hace otro stmt para mostrar la cita y saber cómo está.
+            Cita cita;
+            cita.idCita = sqlite3_column_int(stmt, 0);
+            cita.idPaciente = sqlite3_column_int(stmt, 1);
+            strncpy(cita.fecha, (const char *)sqlite3_column_text(stmt, 2), sizeof(cita.fecha));
+            cita.fecha[sizeof(cita.fecha) - 1] = '\0';
+            cita.idMedico = sqlite3_column_int(stmt, 3);
+            strncpy(cita.estado, (const char *)sqlite3_column_text(stmt, 4), sizeof(cita.estado));
+            cita.estado[sizeof(cita.estado) - 1] = '\0';
+
+            printf("\nCita actual:\n");
+            imprimirCita(cita);
+            sqlite3_finalize(stmt);
+            break;
+        } else {
+            printf("No se encontró ninguna cita con ese ID. Intente nuevamente.\n");
+            sqlite3_finalize(stmt);
+        }
+    }
+
+    // Pedir nueva fecha
+    char nuevaFecha[11];
+    printf("Ingrese la nueva fecha (YYYY-MM-DD): ");
+    scanf("%10s", nuevaFecha);
+
+    // Preguntar si desea cambiar el médico
+    int cambiarMedico = -1;
+    int nuevoIdMedico = -1;
+    char respuesta;
+
+    //preguntamos si queremos cambiar el médico, pedimos el nuevo id de médico y verificamos si ese médico existe
+    while (1) {
+        printf("¿Desea cambiar el médico? (Y/N): ");
+        scanf(" %c", &respuesta);
+        if (respuesta == 'Y' || respuesta == 'y') {
+            cambiarMedico = 1;
+
+            // Verificar nuevo ID médico
+            while (1) {
+                printf("Ingrese el nuevo ID del médico: ");
+                scanf("%d", &nuevoIdMedico);
+                if (verificarMedicoExiste(db, nuevoIdMedico)) break;
+                printf("El médico no existe. Intentalo de nuevo.\n");
+            }
+            break;
+        } else if (respuesta == 'N' || respuesta == 'n') {
+            cambiarMedico = 0;
+            break;
+        } else {
+            printf("Respuesta no válida. Use 'Y' o 'N'.\n");
+        }
+    }
+
+    // Pedir nuevo estado
+    char nuevoEstado[20];
+    printf("Ingrese el nuevo estado: ");
+    scanf("%s", nuevoEstado);
+
+    // Creo consulta dinámica (Se puede cambiar dependiendo de si queremos cambiar o no el médico)
+    const char *sqlBase = "UPDATE Cita SET fecha = ?, estado = ?%s WHERE id = ?";
+    char sqlFinal[256];
+    //si se quiere cambiar el médico, le añadimos el código que queramos
+    snprintf(sqlFinal, sizeof(sqlFinal),
+             sqlBase, (cambiarMedico ? ", medico_id = ?" : ""));
+
+    // Preparar sentencia final
+    if (sqlite3_prepare_v2(db, sqlFinal, -1, &stmt, NULL) != SQLITE_OK) {
+        printf("Error preparando la actualización: %s\n", sqlite3_errmsg(db));
+        return;
+    }
+
+    // Enlazar parámetros
+    sqlite3_bind_text(stmt, 1, nuevaFecha, -1, SQLITE_TRANSIENT);
+    sqlite3_bind_text(stmt, 2, nuevoEstado, -1, SQLITE_TRANSIENT);
+
+    //aquí, dependiendo de si queremos cambiar el id_medico o no, cambiaríamos el lugar en el que insertamos los datos
+    //(ya que el stmt sería más grande.)
+    int index = 3;
+    if (cambiarMedico) {
+        sqlite3_bind_int(stmt, index++, nuevoIdMedico);
+    }
+
+    sqlite3_bind_int(stmt, index, idCita);
+
+    // Ejecutar la actualización
+    if (sqlite3_step(stmt) == SQLITE_DONE) {
+        printf("Cita modificada con exito.\n");
+    } else {
+        printf("Error al modificar la cita: %s\n", sqlite3_errmsg(db));
+    }
+
+    sqlite3_finalize(stmt);
+}
+
+void eliminarCita(sqlite3 *db) {
+    int idCita;
+    printf("Ingrese el ID de la cita que desea eliminar: ");
+    scanf("%d", &idCita);
+    while (getchar() != '\n'); 
+
+    //Saber si la cita existe
+    const char* sqlVerificar = "SELECT id FROM Cita WHERE id = ?;";
+    sqlite3_stmt* stmtVerificar;
+
+    if (sqlite3_prepare_v2(db, sqlVerificar, -1, &stmtVerificar, NULL) != SQLITE_OK) {
+        printf("Error preparando la consulta de verificación: %s\n", sqlite3_errmsg(db));
+        return;
+    }
+
+    sqlite3_bind_int(stmtVerificar, 1, idCita);
+
+    int resultVerificar = sqlite3_step(stmtVerificar);
+    if (resultVerificar != SQLITE_ROW) {
+        // Si no se encuentra la cita
+        printf("No se encontró una cita con el ID %d.\n", idCita);
+        sqlite3_finalize(stmtVerificar);
+        return;
+    }
+
+    sqlite3_finalize(stmtVerificar);
+
+    //Eliminar la cita si existe
+    const char* sqlEliminar = "DELETE FROM Cita WHERE id = ?;";
+    sqlite3_stmt* stmtEliminar;
+
+    if (sqlite3_prepare_v2(db, sqlEliminar, -1, &stmtEliminar, NULL) != SQLITE_OK) {
+        printf("Error preparando la consulta de eliminación: %s\n", sqlite3_errmsg(db));
+        return;
+    }
+
+    sqlite3_bind_int(stmtEliminar, 1, idCita);
+
+    int resultEliminar = sqlite3_step(stmtEliminar);
+    if (resultEliminar == SQLITE_DONE) {
+        printf("Cita con ID %d eliminada correctamente.\n", idCita);
+    } else {
+        printf("Error al eliminar la cita: %s\n", sqlite3_errmsg(db));
+    }
+
+    sqlite3_finalize(stmtEliminar);
 }
