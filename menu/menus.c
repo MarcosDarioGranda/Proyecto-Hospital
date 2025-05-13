@@ -169,6 +169,12 @@ void menuGestionCitas() {
 
 void menuGestionHistorial() {
     int opcion;
+    sqlite3 *db;
+    if (sqlite3_open("BD_HOSPITAL", &db) != SQLITE_OK) {
+        printf("No se pudo abrir la base de datos.\n");
+        return;
+    }
+
     do {
         printf("\n------ HISTORIAL CLINICO ------\n");
         printf("1. Consultar Historial\n");
@@ -179,12 +185,15 @@ void menuGestionHistorial() {
 
         switch (opcion) {
             case 1:
-                printf("\n[Consultar Historial] Ingrese el ID del paciente...\n");
+                consultarHistorialDelPaciente(db);
                 break;
             case 2:
-                printf("\n[Agregar Registro Médico] Ingrese los datos...\n");
+                modificarHistorial(db);
                 break;
             case 3:
+                eliminarHistorial(db);
+                break;
+            case 4:
                 return;
             default:
                 printf("\nOpcion no valida. Intente de nuevo.\n");
