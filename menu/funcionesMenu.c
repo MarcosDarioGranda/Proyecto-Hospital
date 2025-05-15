@@ -599,34 +599,106 @@ void eliminarCita(sqlite3 *db) {
 
 // Función para consultar el historial de un paciente
 void consultarHistorialDelPaciente(sqlite3 *db) {
+    // Mostrar todos los historiales
+    const char* sqlTodos =
+        "SELECT h.id, h.paciente_id, p.nombre, h.antecedente "
+        "FROM HistClinica h "
+        "JOIN Paciente p ON h.paciente_id = p.id;";
+
+    sqlite3_stmt* stmtTodos;
+
+    if (sqlite3_prepare_v2(db, sqlTodos, -1, &stmtTodos, NULL) != SQLITE_OK) {
+        printf("Error preparando la consulta de todos los historiales: %s\n", sqlite3_errmsg(db));
+        return;
+    }
+    
+    printf("----- Todos los historiales existentes -----\n");
+    while (sqlite3_step(stmtTodos) == SQLITE_ROW) {
+        int idHistorial = sqlite3_column_int(stmtTodos, 0);
+        int idPaciente = sqlite3_column_int(stmtTodos, 1);
+        const unsigned char* nombre = sqlite3_column_text(stmtTodos, 2);
+        const unsigned char* antecedente = sqlite3_column_text(stmtTodos, 3);
+
+        printf("Historial ID: %d | Paciente ID: %d | Nombre: %s | Antecedente: %s\n",
+               idHistorial, idPaciente, nombre, antecedente);
+    }
+    sqlite3_finalize(stmtTodos);
+
+    // Ahora pedir ID de paciente para mostrar su historial específico
     int id;
-    printf("Ingrese el ID del paciente del que desea ver el historial:\n");
+    printf("\nIngrese el ID del paciente del que desea ver el historial específico:\n");
     scanf("%d", &id);
 
-    const char* sql = "SELECT id, id_paciente, antecedente FROM Historial WHERE id_paciente = ?;";
-    sqlite3_stmt* stmt;
+    const char* sqlPaciente =
+        "SELECT h.id, p.nombre, h.antecedente "
+        "FROM HistClinica h "
+        "JOIN Paciente p ON h.paciente_id = p.id "
+        "WHERE p.id = ?;";
 
-    if (sqlite3_prepare_v2(db, sql, -1, &stmt, NULL) != SQLITE_OK) {
-        printf("Error preparando la consulta: %s\n", sqlite3_errmsg(db));
+    sqlite3_stmt* stmtPaciente;
+
+    if (sqlite3_prepare_v2(db, sqlPaciente, -1, &stmtPaciente, NULL) != SQLITE_OK) {
+        printf("Error preparando la consulta del paciente: %s\n", sqlite3_errmsg(db));
         return;
     }
 
-    sqlite3_bind_int(stmt, 1, id);
+    sqlite3_bind_int(stmtPaciente, 1, id);
 
     int encontrado = 0;
-    while (sqlite3_step(stmt) == SQLITE_ROW) {
-        Historial historial;
-        historial.idHistorial = sqlite3_column_int(stmt, 0);
-        historial.idPaciente = sqlite3_column_int(stmt, 1);
-        strncpy(historial.antecedente, (const char*)sqlite3_column_text(stmt, 2), sizeof(historial.antecedente));
-        historial.antecedente[sizeof(historial.antecedente) - 1] = '\0';
+    while (sqlite3_step(stmtPaciente) == SQLITE_ROW) {
+        int idHistorial = sqlite3_column_int(stmtPaciente, 0);
+        const unsigned char* nombre = sqlite3_column_text(stmtPaciente, 1);
+        const unsigned char* antecedente = sqlite3_column_text(stmtPaciente, 2);
 
-        imprimirHistorial(historial);
+        printf("\nHistorial ID: %d\n", idHistorial);
+        printf("Paciente: %s\n", nombre);
+        printf("Antecedente: %s\n", antecedente);
         encontrado = 1;
     }
 
     if (!encontrado) {
         printf("No se encontraron antecedentes para el paciente con ID %d.\n", id);
+    }
+
+    sqlite3_finalize(stmtPaciente);
+}
+
+
+
+void AgregarHistorial(sqlite3 *db)
+{
+    int idPaciente;
+    char antecedente[256];
+
+    do {
+        printf("Ingrese el ID del paciente: ");
+        scanf("%d", &idPaciente);
+
+        if (!verificarPacienteExiste(db, idPaciente)) {
+            printf("Paciente no encontrado. Inténtalo de nuevo.\n");
+        } else {
+            break;
+        }
+    } while (1);
+
+    printf("Ingrese el antecedente médico (máx 255 caracteres): ");
+    scanf(" %[^\n]", antecedente);
+
+    const char *sql = "INSERT INTO HistClinica (paciente_id, antecedente) VALUES (?, ?);";
+    sqlite3_stmt *stmt;
+
+    if (sqlite3_prepare_v2(db, sql, -1, &stmt, NULL) != SQLITE_OK) {
+        printf("Error preparando la inserción: %s\n", sqlite3_errmsg(db));
+        return;
+    }
+
+    sqlite3_bind_int(stmt, 1, idPaciente);
+    sqlite3_bind_text(stmt, 2, antecedente, -1, SQLITE_STATIC);
+
+    if (sqlite3_step(stmt) == SQLITE_DONE) {
+        printf("Historial agregado correctamente.\n");
+    } else {
+        printf("Error al agregar historial: %s\n", sqlite3_errmsg(db));
     }
 
     sqlite3_finalize(stmt);
@@ -640,9 +712,14 @@ void modificarHistorial(sqlite3 *db) {
     while (1) {
         printf("Ingrese el ID del historial que desea modificar: ");
         scanf("%d", &idHistorial);
-        while (getchar() != '\n');
+        while (getchar() != '\n');  // limpiar buffer
 
-        const char *sqlCheck = "SELECT id, paciente_id, antecedente FROM Historial WHERE id = ?";
+        const char *sqlCheck =
+            "SELECT h.id, p.nombre, h.antecedente "
+            "FROM HistClinica h "
+            "JOIN Paciente p ON h.paciente_id = p.id "
+            "WHERE h.id = ?";
+
         if (sqlite3_prepare_v2(db, sqlCheck, -1, &stmt, NULL) != SQLITE_OK) {
             printf("Error preparando la consulta: %s\n", sqlite3_errmsg(db));
             return;
@@ -651,17 +728,13 @@ void modificarHistorial(sqlite3 *db) {
         sqlite3_bind_int(stmt, 1, idHistorial);
 
         if (sqlite3_step(stmt) == SQLITE_ROW) {
-            
-            Historial historial;
-            historial.idHistorial = sqlite3_column_int(stmt, 0);
-            historial.idPaciente = sqlite3_column_int(stmt, 1);
-            strncpy(historial.antecedente, (const char *)sqlite3_column_text(stmt, 2), sizeof(historial.antecedente));
-            historial.antecedente[sizeof(historial.antecedente) - 1] = '\0';
+            const char *nombre = (const char *)sqlite3_column_text(stmt, 1);
+            const char *antecedente = (const char *)sqlite3_column_text(stmt, 2);
 
             printf("\nHistorial actual:\n");
-            printf("ID: %d\n", historial.idHistorial);
-            printf("ID Paciente: %d\n", historial.idPaciente);
-            printf("Antecedente: %s\n", historial.antecedente);
+            printf("ID: %d\n", idHistorial);
+            printf("Paciente: %s\n", nombre);
+            printf("Antecedente: %s\n", antecedente);
 
             sqlite3_finalize(stmt);
             break;
@@ -671,15 +744,12 @@ void modificarHistorial(sqlite3 *db) {
         }
     }
 
-    
     char nuevoAntecedente[256];
     printf("Ingrese el nuevo antecedente: ");
     fgets(nuevoAntecedente, sizeof(nuevoAntecedente), stdin);
-    
-    nuevoAntecedente[strcspn(nuevoAntecedente, "\n")] = 0;
+    nuevoAntecedente[strcspn(nuevoAntecedente, "\n")] = 0; // quitar salto línea
 
-    //UPDATE
-    const char *sqlUpdate = "UPDATE Historial SET antecedente = ? WHERE id = ?";
+    const char *sqlUpdate = "UPDATE HistClinica SET antecedente = ? WHERE id = ?";
     if (sqlite3_prepare_v2(db, sqlUpdate, -1, &stmt, NULL) != SQLITE_OK) {
         printf("Error preparando la actualización: %s\n", sqlite3_errmsg(db));
         return;
@@ -698,14 +768,14 @@ void modificarHistorial(sqlite3 *db) {
 }
 
 
+
 void eliminarHistorial(sqlite3 *db) {
     int idHistorial;
     printf("Ingrese el ID del historial que desea eliminar: ");
     scanf("%d", &idHistorial);
     while (getchar() != '\n');
 
-    
-    const char* sqlVerificar = "SELECT id FROM Historial WHERE id = ?;";
+    const char* sqlVerificar = "SELECT id FROM HistClinica WHERE id = ?;";
     sqlite3_stmt* stmtVerificar;
 
     if (sqlite3_prepare_v2(db, sqlVerificar, -1, &stmtVerificar, NULL) != SQLITE_OK) {
@@ -724,8 +794,7 @@ void eliminarHistorial(sqlite3 *db) {
 
     sqlite3_finalize(stmtVerificar);
 
-    
-    const char* sqlEliminar = "DELETE FROM Historial WHERE id = ?;";
+    const char* sqlEliminar = "DELETE FROM HistClinica WHERE id = ?;";
     sqlite3_stmt* stmtEliminar;
 
     if (sqlite3_prepare_v2(db, sqlEliminar, -1, &stmtEliminar, NULL) != SQLITE_OK) {

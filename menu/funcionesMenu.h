@@ -33,6 +33,7 @@ void eliminarCita(sqlite3 *db);
 
 //Funciones Gestion cita
 void consultarHistorialDelPaciente(sqlite3 *db);
+void AgregarHistorial(sqlite3 *db);
 void modificarHistorial(sqlite3 *db);
 void eliminarHistorial(sqlite3 *db);
 #endif
