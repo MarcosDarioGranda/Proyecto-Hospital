@@ -68,3 +68,12 @@
 [2025-05-15 10:41:15] Inicio de sesion.
 [2025-05-15 10:57:15] Inicio de sesion.
 [2025-05-15 10:59:04] Cierre de sesion.
+[2025-05-17 15:32:59] Inicio de sesion.
+[2025-05-17 15:33:43] Inicio de sesion.
+[2025-05-17 15:34:38] Inicio de sesion.
+[2025-05-17 15:40:09] Inicio de sesion.
+[2025-05-17 15:40:36] Inicio de sesion.
+[2025-05-17 15:42:54] Cierre de sesion.
+[2025-05-17 15:43:11] Inicio de sesion.
+[2025-05-17 15:44:04] Cierre de sesion.
+[2025-05-17 15:44:30] Inicio de sesion.
