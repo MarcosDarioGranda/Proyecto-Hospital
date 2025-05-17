@@ -1,0 +1,67 @@
+@echo off
+setlocal
+
+REM Directorios
+set SRC_LIB=lib\src
+set INC_LIB=lib\include
+set LIB_OUT=lib
+set OBJ_OUT=obj
+
+REM Asegurarnos de que existan carpetas
+if not exist %OBJ_OUT% mkdir %OBJ_OUT%
+
+echo --------------------------------------------------
+echo 1) Compilando la librería de negocio
+echo --------------------------------------------------
+for %%F in (
+  "%SRC_LIB%\bd\sqlite3.c"
+  "%SRC_LIB%\entidades\paciente.c"
+  "%SRC_LIB%\entidades\historial.c"
+  "%SRC_LIB%\entidades\cita.c"
+  "%SRC_LIB%\entidades\usuario.c"
+  "%SRC_LIB%\menu\funcionesMenu.c"
+  "%SRC_LIB%\menu\log.c"
+  "%SRC_LIB%\menu\menus.c"
+  "lib\src\hospital.c"
+) do (
+  echo Compilando %%~nxF
+  gcc -c "%%F" -I"%INC_LIB%" -o "%OBJ_OUT%\%%~nF.o" || goto :Error
+)
+
+echo --------------------------------------------------
+echo 2) Empaquetando libhospital.a
+echo --------------------------------------------------
+if exist "%LIB_OUT%\libhospital.a" del /q "%LIB_OUT%\libhospital.a"
+ar rcs "%LIB_OUT%\libhospital.a" "%OBJ_OUT%\*.o" || goto :Error
+
+echo --------------------------------------------------
+echo 3) Compilando Servidor.exe
+echo --------------------------------------------------
+g++ ^
+  servidor\main.cpp ^
+  servidor\protocolo.cpp ^
+  -I"%INC_LIB%" ^
+  -L"%LIB_OUT%" -lhospital -lws2_32 ^
+  -o servidor.exe || goto :Error
+
+echo --------------------------------------------------
+echo 4) Compilando Cliente.exe
+echo --------------------------------------------------
+g++ ^
+  cliente\main.cpp ^
+  cliente\protocolo.cpp ^
+  -I"%INC_LIB%" ^
+  -L"%LIB_OUT%" -lhospital -lws2_32 ^
+  -o cliente.exe || goto :Error
+
+echo.
+echo ====== BUILD COMPLETADO ======
+pause
+endlocal
+exit /b 0
+
+:Error
+echo.
+echo !!! ERROR DETECTADO. Abortando.
+pause
+exit /b 1
