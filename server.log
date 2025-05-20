@@ -1,0 +1,11 @@
+[INIT] Servidor arrancado
+[REQ] CONSULTA_HISTORIAL|3
+[RES] OK|ERR: No se encontraron historiales para ese paciente
+[REQ] CONSULTA_HISTORIAL|3
+[RES] OK|ERR: No se encontraron historiales para ese paciente
+[REQ] CONSULTA_HISTORIAL|2
+[RES] OK|1|a|Diabetes tipo 2
+[REQ] CONSULTA_HISTORIAL|2
+[RES] OK|1|a|Diabetes tipo 2
+[REQ] AGREGAR_HISTORIAL|2|alzehimer
+[RES] [REQ] SALIR

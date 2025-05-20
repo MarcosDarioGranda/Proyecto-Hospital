@@ -11,6 +11,7 @@
 #include <vector>
 #include "protocolo.h"
 #include "../lib/include/hospital.h"
+#include <fstream>
 
 #pragma comment(lib, "Ws2_32.lib")
 
@@ -19,6 +20,14 @@
 #define BUFFER_SIZE 2048
 
 int main() {
+    // ─── Abrir log de servidor ──────────────────────────────────
+    std::ofstream srvLog("server.log", std::ios::app);
+    if (!srvLog.is_open()) {
+        std::cerr << "ERROR: no puedo abrir server.log para escribir\n";
+        return 1;
+    }
+    srvLog << "[INIT] Servidor arrancado\n";
+    // ────────────────────────────────────────────────────────────
     WSADATA wsaData;
     int iResult;
 
@@ -92,6 +101,11 @@ int main() {
         if (iResult > 0) {
             buffer[iResult] = '\0';
             std::string req(buffer);
+        // ── Loggear petición ────────────────────────────────────
+            srvLog << "[REQ] " << req;
+            srvLog.flush();
+        // ─────────────────────────────────────────────────────────
+            
             Command cmd = parseCommand(req);
             std::string response;
 
@@ -127,6 +141,10 @@ int main() {
                 default:
                     response = "ERR|Comando desconocido\n";
             }
+            // ── Loggear respuesta ──────────────────────────────────
+            srvLog << "[RES] " << response;
+            srvLog.flush();
+            // ─────────────────────────────────────────────────────────
             send(clientSock, response.c_str(), (int)response.size(), 0);
         }
         else if (iResult == 0) {

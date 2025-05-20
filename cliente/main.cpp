@@ -7,16 +7,27 @@
 #include <ws2tcpip.h>
 #include <windows.h>
 #include <iostream>
-#include <string>
-#include <vector>
 #include "protocolo.h"
 #include <limits>
+#include <sstream>
+
 
 #pragma comment(lib, "Ws2_32.lib")
 
 #define DEFAULT_PORT "6000"
 #define SERVER_ADDRESS "127.0.0.1"
 #define BUFFER_SIZE 2048
+
+using namespace std;
+
+#include <unordered_map>
+#include <vector>
+#include <string>
+
+// Caché: mapea ID de paciente → lista de líneas de historial
+static unordered_map<int, vector<string>> cacheHistorial;
+
+
 
 int main() {
     WSADATA wsaData;
@@ -25,7 +36,7 @@ int main() {
     // 1) Inicializar Winsock
     iResult = WSAStartup(MAKEWORD(2,2), &wsaData);
     if (iResult != 0) {
-        std::cerr << "WSAStartup falló: " << iResult << "\n";
+        cerr << "WSAStartup falló: " << iResult << "\n";
         return 1;
     }
 
@@ -35,7 +46,7 @@ int main() {
     hints.ai_socktype = SOCK_STREAM;
     iResult = getaddrinfo(SERVER_ADDRESS, DEFAULT_PORT, &hints, &serverInfo);
     if (iResult != 0) {
-        std::cerr << "getaddrinfo falló: " << iResult << "\n";
+        cerr << "getaddrinfo falló: " << iResult << "\n";
         WSACleanup();
         return 1;
     }
@@ -43,7 +54,7 @@ int main() {
     // 3) Crear socket
     SOCKET connSock = socket(serverInfo->ai_family, serverInfo->ai_socktype, serverInfo->ai_protocol);
     if (connSock == INVALID_SOCKET) {
-        std::cerr << "socket() falló: " << WSAGetLastError() << "\n";
+        cerr << "socket() falló: " << WSAGetLastError() << "\n";
         freeaddrinfo(serverInfo);
         WSACleanup();
         return 1;
@@ -53,38 +64,80 @@ int main() {
     iResult = connect(connSock, serverInfo->ai_addr, (int)serverInfo->ai_addrlen);
     freeaddrinfo(serverInfo);
     if (iResult == SOCKET_ERROR) {
-        std::cerr << "connect() falló: " << WSAGetLastError() << "\n";
+        cerr << "connect() falló: " << WSAGetLastError() << "\n";
         closesocket(connSock);
         WSACleanup();
         return 1;
     }
-    std::cout << "Conectado al servidor " << SERVER_ADDRESS << ":" << DEFAULT_PORT << "\n";
+    cout << "Conectado al servidor " << SERVER_ADDRESS << ":" << DEFAULT_PORT << "\n";
 
     // 5) Menú y bucle de interacción
     bool salir = false;
     char recvbuf[BUFFER_SIZE];
     while (!salir) {
-        std::cout << "\n1) Consultar historial\n2) Agregar historial\n3) Salir\n> ";
-        int opcion; std::cin >> opcion;
+        cout << "\n1) Consultar historial\n2) Agregar historial\n3) Salir\n> ";
+        int opcion; cin >> opcion;
 
-        std::string request;
+        string request;
         switch (opcion) {
             case 1: {
-                int id; std::cout << "ID Paciente: "; std::cin >> id;
-                request = formatRequest(CMD_CONSULTA_HISTORIAL, { std::to_string(id) });
+                int id;
+                cout << "ID Paciente: ";
+                cin >> id;
+
+                // 2.1 Si ya está en caché, lo mostramos y no pedimos al servidor
+                auto it = cacheHistorial.find(id);
+                if (it != cacheHistorial.end()) {
+                    cout << "(desde caché)\n";
+                    for (auto &linea : it->second) {
+                        cout << linea << "\n";
+                    }
+                } else {
+                    // 2.2 No está en caché: enviamos petición
+                    request = formatRequest(CMD_CONSULTA_HISTORIAL, { to_string(id) });
+                    send(connSock, request.c_str(), (int)request.size(), 0);
+
+                    // 2.3 Recibimos la respuesta completa
+                    int n = recv(connSock, recvbuf, BUFFER_SIZE - 1, 0);
+                    recvbuf[n] = '\0';
+                    string respuesta(recvbuf);
+
+                    // 2.4 Parseamos líneas de datos (descartando el prefijo "OK|")
+                    vector<string> lineas;
+                    if (respuesta.rfind("OK|", 0) == 0) {
+                        // cortamos el "OK|"
+                        string datos = respuesta.substr(3);
+                        istringstream ss(datos);
+                        string linea;
+                        while (getline(ss, linea)) {
+                            if (!linea.empty()) lineas.push_back(linea);
+                        }
+                    } else {
+                        // en caso de ERR|...
+                        cout << "Respuesta: " << respuesta << "\n";
+                        break;
+                    }
+
+                    // 2.5 Guardamos en caché y mostramos
+                    cacheHistorial[id] = lineas;
+                    for (auto &l : lineas) {
+                        cout << l << "\n";
+                    }
+                }
                 break;
             }
+
             case 2: {
                 int id; 
-                std::cout << "ID Paciente: ";
-                std::cin >> id;
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // limpiar el '\n'  
-                std::cout << "Antecedente: ";
-                std::string antecedente;
-                std::getline(std::cin, antecedente);
+                cout << "ID Paciente: ";
+                cin >> id;
+                cin.ignore(numeric_limits<streamsize>::max(), '\n'); // limpiar el '\n'  
+                cout << "Antecedente: ";
+                string antecedente;
+                getline(cin, antecedente);
 
                 request = formatRequest(CMD_AGREGAR_HISTORIAL, {
-                std::to_string(id),
+                to_string(id),
                 antecedente
                 });
                 break;
@@ -94,26 +147,26 @@ int main() {
                 salir = true;
                 break;
             default:
-                std::cout << "Opción no válida.\n";
+                cout << "Opción no válida.\n";
                 continue;
         }
 
         // 6) Enviar y recibir
         iResult = send(connSock, request.c_str(), (int)request.size(), 0);
         if (iResult == SOCKET_ERROR) {
-            std::cerr << "send() falló: " << WSAGetLastError() << "\n";
+            cerr << "send() falló: " << WSAGetLastError() << "\n";
             break;
         }
 
         iResult = recv(connSock, recvbuf, BUFFER_SIZE - 1, 0);
         if (iResult > 0) {
             recvbuf[iResult] = '\0';
-            std::cout << "Respuesta: " << recvbuf;
+            cout << "Respuesta: " << recvbuf;
         } else if (iResult == 0) {
-            std::cout << "Conexión cerrada por el servidor.\n";
+            cout << "Conexión cerrada por el servidor.\n";
             break;
         } else {
-            std::cerr << "recv() falló: " << WSAGetLastError() << "\n";
+            cerr << "recv() falló: " << WSAGetLastError() << "\n";
             break;
         }
     }
