@@ -115,7 +115,7 @@ void buscarPaciente(sqlite3 *db) {
         //Hacer con una funcion de imprimir Paciente
         Paciente* p = (Paciente*) malloc(sizeof(Paciente));
         p->id = sqlite3_column_int(stmt, 0);
-        strcpy(p->nombre,sqlite3_column_text(stmt, 1));
+        strcpy(p->nombre,(const char*)sqlite3_column_text(stmt, 1));
         strcpy(p->fecha_nac, sqlite3_column_text(stmt, 2));
         strcpy(p->direccion, sqlite3_column_text(stmt, 3));
         p->tlfn = sqlite3_column_int(stmt, 4);

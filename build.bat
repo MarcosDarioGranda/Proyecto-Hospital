@@ -1,13 +1,11 @@
 @echo off
 setlocal
 
-REM Directorios
 set SRC_LIB=lib\src
 set INC_LIB=lib\include
 set LIB_OUT=lib
 set OBJ_OUT=obj
 
-REM Asegurarnos de que existan carpetas
 if not exist %OBJ_OUT% mkdir %OBJ_OUT%
 
 echo --------------------------------------------------
@@ -32,7 +30,10 @@ echo --------------------------------------------------
 echo 2) Empaquetando libhospital.a
 echo --------------------------------------------------
 if exist "%LIB_OUT%\libhospital.a" del /q "%LIB_OUT%\libhospital.a"
-ar rcs "%LIB_OUT%\libhospital.a" "%OBJ_OUT%\*.o" || goto :Error
+for %%F in (%OBJ_OUT%\*.o) do (
+  echo Agregando %%~nxF
+  ar rcs "%LIB_OUT%\libhospital.a" "%%F" || goto :Error
+)
 
 echo --------------------------------------------------
 echo 3) Compilando Servidor.exe
@@ -65,3 +66,4 @@ echo.
 echo !!! ERROR DETECTADO. Abortando.
 pause
 exit /b 1
+
