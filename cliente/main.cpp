@@ -10,6 +10,7 @@
 #include <string>
 #include <vector>
 #include "protocolo.h"
+#include <limits>
 
 #pragma comment(lib, "Ws2_32.lib")
 
@@ -74,9 +75,18 @@ int main() {
                 break;
             }
             case 2: {
-                int id; std::cout << "ID Paciente: "; std::cin >> id;
-                // pide más datos según tu Fase 1…
-                request = formatRequest(CMD_AGREGAR_HISTORIAL, { std::to_string(id) /*, resto */ });
+                int id; 
+                std::cout << "ID Paciente: ";
+                std::cin >> id;
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // limpiar el '\n'  
+                std::cout << "Antecedente: ";
+                std::string antecedente;
+                std::getline(std::cin, antecedente);
+
+                request = formatRequest(CMD_AGREGAR_HISTORIAL, {
+                std::to_string(id),
+                antecedente
+                });
                 break;
             }
             case 3:

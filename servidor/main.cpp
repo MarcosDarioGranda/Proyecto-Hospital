@@ -105,13 +105,19 @@ int main() {
                     break;
                 }
                 case CMD_AGREGAR_HISTORIAL: {
-                    auto fields = splitFields(req);
-                    int id = std::stoi(fields[1]);
-                    const char *ante = fields[2].c_str();
+                    auto f = splitFields(req);
+                    if (f.size() < 3) {
+                        std::string resp = "ERR|Parámetros insuficientes para AGREGAR_HISTORIAL\n";
+                        send(clientSock, resp.c_str(), resp.size(), 0);
+                        break;
+                    }
+                    int id = std::stoi(f[1]);
+                    const char *ante = f[2].c_str();
                     int rc = hospital_agregar_historial(id, ante);
-                    response = (rc == 0)
+                    std::string resp = (rc == 0)
                         ? "OK|Historial agregado\n"
                         : "ERR|No se pudo agregar historial\n";
+                    send(clientSock, resp.c_str(), resp.size(), 0);
                     break;
                 }
                 case CMD_SALIR:
