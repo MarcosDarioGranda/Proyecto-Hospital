@@ -5,7 +5,7 @@
 #include <vector>
 #include <sstream>
 #include <cstring>
-#include "sqlite3.h"
+#include "../lib/src/bd/sqlite3.h"
 
 #pragma comment(lib, "Ws2_32.lib")
 
@@ -77,7 +77,7 @@ string buscarPacientePorID(const string& id_str) {
     return resultado;
 }
 
-string añadirPaciente(const string& datos) {
+string anyadirPaciente(const string& datos) {
     sqlite3* db = abrirBaseDeDatos();
     if (!db) return "Error al abrir la base de datos.";
 
@@ -174,7 +174,7 @@ string procesarComando(const string& entrada) {
 
     if (comando == "LISTAR_PACIENTES") return listarPacientes();
     if (comando == "BUSCAR_PACIENTE") return buscarPacientePorID(argumentos);
-    if (comando == "AÑADIR_PACIENTE") return añadirPaciente(argumentos);
+    if (comando == "AÑADIR_PACIENTE") return anyadirPaciente(argumentos);
     if (comando == "MODIFICAR_PACIENTE") return modificarPaciente(argumentos);
     if (comando == "ELIMINAR_PACIENTE") return eliminarPaciente(argumentos);
     if (comando == "SALIR") return "Desconectando...\n";
@@ -182,51 +182,4 @@ string procesarComando(const string& entrada) {
     return "Comando no reconocido\n";
 }
 
-int main() {
-    WSADATA wsaData;
-    SOCKET ListenSocket = INVALID_SOCKET;
-    SOCKET ClientSocket = INVALID_SOCKET;
 
-    struct addrinfo hints, *result = NULL;
-
-    WSAStartup(MAKEWORD(2, 2), &wsaData);
-
-    ZeroMemory(&hints, sizeof(hints));
-    hints.ai_family = AF_INET;
-    hints.ai_socktype = SOCK_STREAM;
-    hints.ai_protocol = IPPROTO_TCP;
-    hints.ai_flags = AI_PASSIVE;
-
-    getaddrinfo(NULL, DEFAULT_PORT, &hints, &result);
-
-    ListenSocket = socket(result->ai_family, result->ai_socktype, result->ai_protocol);
-    bind(ListenSocket, result->ai_addr, (int)result->ai_addrlen);
-    listen(ListenSocket, SOMAXCONN);
-
-    cout << "Servidor esperando conexiones en el puerto " << DEFAULT_PORT << "...\n";
-
-    ClientSocket = accept(ListenSocket, NULL, NULL);
-    cout << "Cliente conectado.\n";
-
-    char recvbuf[BUFFER_SIZE];
-    int recvbuflen = BUFFER_SIZE;
-
-    while (true) {
-        memset(recvbuf, 0, recvbuflen);
-        int bytesRecibidos = recv(ClientSocket, recvbuf, recvbuflen, 0);
-        if (bytesRecibidos <= 0) break;
-
-        string comando(recvbuf);
-        string respuesta = procesarComando(comando);
-        send(ClientSocket, respuesta.c_str(), (int)respuesta.length(), 0);
-
-        if (comando.find("SALIR") == 0) break;
-    }
-
-    closesocket(ClientSocket);
-    closesocket(ListenSocket);
-    WSACleanup();
-
-    cout << "Servidor cerrado.\n";
-    return 0;
-}

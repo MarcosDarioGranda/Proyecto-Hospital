@@ -9,7 +9,7 @@ set OBJ_OUT=obj
 if not exist %OBJ_OUT% mkdir %OBJ_OUT%
 
 echo --------------------------------------------------
-echo 1) Compilando la librería de negocio
+echo 1) Compilando la libreria de negocio
 echo --------------------------------------------------
 for %%F in (
   "%SRC_LIB%\bd\sqlite3.c"
@@ -41,6 +41,8 @@ echo --------------------------------------------------
 g++ ^
   servidor\main.cpp ^
   servidor\protocolo.cpp ^
+  servidor\funciones_pacientes.cpp ^
+  servidor\login.cpp ^
   -I"%INC_LIB%" ^
   -L"%LIB_OUT%" -lhospital -lws2_32 ^
   -o servidor.exe || goto :Error
@@ -51,6 +53,8 @@ echo --------------------------------------------------
 g++ ^
   cliente\main.cpp ^
   cliente\protocolo.cpp ^
+  cliente\menu.cpp ^
+  cliente\menu_login.cpp ^
   -I"%INC_LIB%" ^
   -L"%LIB_OUT%" -lhospital -lws2_32 ^
   -o cliente.exe || goto :Error

@@ -22,12 +22,7 @@ void mostrarMenu(int socket) {
     int opcion;
     do {
         cout << "\n--- Menú Principal ---\n";
-        cout << "1. Ver lista de pacientes
-2. Buscar paciente por ID
-3. Añadir nuevo paciente
-4. Modificar paciente existente
-5. Eliminar paciente
-6. Salir\n";
+        cout << "1. Ver lista de pacientes\n2. Buscar paciente por ID\n3. Añadir nuevo paciente\n4. Modificar paciente existente\n5. Eliminar paciente\n6. Salir\n";
         cout << "Seleccione una opción: ";
         cin >> opcion;
         cin.ignore();
