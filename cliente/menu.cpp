@@ -18,7 +18,7 @@ string recibirRespuesta(int socket) {
     return string(buffer);
 }
 
-void mostrarMenu(int socket) {
+void mostrarMenuPacientes(int socket) {
     int opcion;
     do {
         cout << "\n--- Menú Principal ---\n";

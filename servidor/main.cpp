@@ -22,21 +22,28 @@
 #define BUFFER_SIZE 2048
 
 int main() {
-    std::ofstream srvLog("server.log", std::ios::app);
+std::ofstream srvLog("server.log", std::ios::app);
     if (!srvLog.is_open()) {
         std::cerr << "ERROR: no puedo abrir server.log para escribir\n";
         return 1;
     }
     srvLog << "[INIT] Servidor arrancado\n";
 
+    // -- INICIALIZAR WINSOCK --
     WSADATA wsaData;
-    int iResult;
+    int iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
+    if (iResult != 0) {
+        std::cerr << "WSAStartup falló: " << iResult << "\n";
+        return 1;
+    }
 
+    // Ahora ya puedes usar getaddrinfo, socket, bind, listen, etc.
     struct addrinfo hints = {};
     struct addrinfo *addrResult = nullptr;
     hints.ai_family   = AF_INET;
     hints.ai_socktype = SOCK_STREAM;
     hints.ai_flags    = AI_PASSIVE;
+
     iResult = getaddrinfo(nullptr, DEFAULT_PORT, &hints, &addrResult);
     if (iResult != 0) {
         std::cerr << "getaddrinfo falló: " << iResult << "\n";

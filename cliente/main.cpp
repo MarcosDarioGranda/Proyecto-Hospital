@@ -14,7 +14,6 @@
 #include "protocolo.h"
 #include "menu_login.h"
 #include "menu.h"
-#include "../servidor/funciones_pacientes.h"
 
 #pragma comment(lib, "Ws2_32.lib")
 
