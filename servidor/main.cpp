@@ -12,7 +12,8 @@
 #include "protocolo.h"
 #include "../lib/include/hospital.h"
 #include "login.h"
-#include "funciones_pacientes.cpp" // Incluye procesarComando()
+
+#include "funciones_pacientes.h"
 
 #pragma comment(lib, "Ws2_32.lib")
 
@@ -112,6 +113,7 @@ int main() {
 
             Command cmd = parseCommand(req);
             switch (cmd) {
+
                 case CMD_CONSULTA_HISTORIAL: {
                     auto fields = splitFields(req);
                     int id = std::stoi(fields[1]);

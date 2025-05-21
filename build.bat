@@ -39,14 +39,13 @@ echo --------------------------------------------------
 echo 3) Compilando Servidor.exe
 echo --------------------------------------------------
 g++ ^
-  servidor\main.cpp ^
-  servidor\protocolo.cpp ^
-  servidor\funciones_pacientes.cpp ^
-  servidor\login.cpp ^
+  servidor/main.cpp ^
+  servidor/protocolo.cpp ^
+  servidor/login.cpp ^
+  servidor/funciones_pacientes.cpp ^
   -I"%INC_LIB%" ^
   -L"%LIB_OUT%" -lhospital -lws2_32 ^
   -o servidor.exe || goto :Error
-
 echo --------------------------------------------------
 echo 4) Compilando Cliente.exe
 echo --------------------------------------------------
