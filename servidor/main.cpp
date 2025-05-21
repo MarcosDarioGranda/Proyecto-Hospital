@@ -1,17 +1,18 @@
-// servidor/main.cpp
 #ifndef _WIN32_WINNT
-#define _WIN32_WINNT 0x0501   // Windows XP o superior
+#define _WIN32_WINNT 0x0501
 #endif
 
-#include <winsock2.h>    // Debe incluirse antes de windows.h
+#include <winsock2.h>
 #include <ws2tcpip.h>
 #include <windows.h>
 #include <iostream>
 #include <string>
 #include <vector>
+#include <fstream>
 #include "protocolo.h"
 #include "../lib/include/hospital.h"
-#include <fstream>
+#include "login.h"
+#include "funciones_pacientes.cpp" // Incluye procesarComando()
 
 #pragma comment(lib, "Ws2_32.lib")
 
@@ -20,30 +21,21 @@
 #define BUFFER_SIZE 2048
 
 int main() {
-    // ─── Abrir log de servidor ──────────────────────────────────
     std::ofstream srvLog("server.log", std::ios::app);
     if (!srvLog.is_open()) {
         std::cerr << "ERROR: no puedo abrir server.log para escribir\n";
         return 1;
     }
     srvLog << "[INIT] Servidor arrancado\n";
-    // ────────────────────────────────────────────────────────────
+
     WSADATA wsaData;
     int iResult;
 
-    // 1) Inicializar Winsock
-    iResult = WSAStartup(MAKEWORD(2,2), &wsaData);
-    if (iResult != 0) {
-        std::cerr << "WSAStartup falló: " << iResult << "\n";
-        return 1;
-    }
-
-    // 2) Preparar hints y resolver dirección
     struct addrinfo hints = {};
     struct addrinfo *addrResult = nullptr;
     hints.ai_family   = AF_INET;
     hints.ai_socktype = SOCK_STREAM;
-    hints.ai_flags    = AI_PASSIVE;  // Para bind()
+    hints.ai_flags    = AI_PASSIVE;
     iResult = getaddrinfo(nullptr, DEFAULT_PORT, &hints, &addrResult);
     if (iResult != 0) {
         std::cerr << "getaddrinfo falló: " << iResult << "\n";
@@ -51,7 +43,6 @@ int main() {
         return 1;
     }
 
-    // 3) Crear socket para escuchar
     SOCKET listenSock = socket(
         addrResult->ai_family,
         addrResult->ai_socktype,
@@ -64,7 +55,6 @@ int main() {
         return 1;
     }
 
-    // 4) Bind al puerto
     iResult = bind(listenSock, addrResult->ai_addr, (int)addrResult->ai_addrlen);
     freeaddrinfo(addrResult);
     if (iResult == SOCKET_ERROR) {
@@ -74,7 +64,6 @@ int main() {
         return 1;
     }
 
-    // 5) Listen
     iResult = listen(listenSock, BACKLOG);
     if (iResult == SOCKET_ERROR) {
         std::cerr << "listen() falló: " << WSAGetLastError() << "\n";
@@ -84,7 +73,6 @@ int main() {
     }
     std::cout << "Servidor escuchando en puerto " << DEFAULT_PORT << "\n";
 
-    // 6) Aceptar cliente
     SOCKET clientSock = accept(listenSock, nullptr, nullptr);
     if (clientSock == INVALID_SOCKET) {
         std::cerr << "accept() falló: " << WSAGetLastError() << "\n";
@@ -94,21 +82,35 @@ int main() {
     }
     std::cout << "Cliente conectado.\n";
 
-    // 7) Bucle de atención al cliente
     char buffer[BUFFER_SIZE];
     while (true) {
         iResult = recv(clientSock, buffer, BUFFER_SIZE - 1, 0);
         if (iResult > 0) {
             buffer[iResult] = '\0';
             std::string req(buffer);
-        // ── Loggear petición ────────────────────────────────────
-            srvLog << "[REQ] " << req;
+
+            srvLog << "[REQ] " << req << "\n";
             srvLog.flush();
-        // ─────────────────────────────────────────────────────────
-            
-            Command cmd = parseCommand(req);
+
             std::string response;
 
+            if (req.rfind("LOGIN", 0) == 0) {
+                auto f = splitFields(req);
+                if (f.size() < 3) {
+                    response = "ERR|Faltan parámetros\n";
+                } else {
+                    std::string rol;
+                    if (validarLogin(f[1], f[2], rol)) {
+                        response = "OK|" + rol + "\n";
+                    } else {
+                        response = "ERR|Usuario o contraseña incorrectos\n";
+                    }
+                }
+                send(clientSock, response.c_str(), response.size(), 0);
+                continue;
+            }
+
+            Command cmd = parseCommand(req);
             switch (cmd) {
                 case CMD_CONSULTA_HISTORIAL: {
                     auto fields = splitFields(req);
@@ -121,17 +123,15 @@ int main() {
                 case CMD_AGREGAR_HISTORIAL: {
                     auto f = splitFields(req);
                     if (f.size() < 3) {
-                        std::string resp = "ERR|Parámetros insuficientes para AGREGAR_HISTORIAL\n";
-                        send(clientSock, resp.c_str(), resp.size(), 0);
+                        response = "ERR|Parámetros insuficientes para AGREGAR_HISTORIAL\n";
                         break;
                     }
                     int id = std::stoi(f[1]);
                     const char *ante = f[2].c_str();
                     int rc = hospital_agregar_historial(id, ante);
-                    std::string resp = (rc == 0)
+                    response = (rc == 0)
                         ? "OK|Historial agregado\n"
                         : "ERR|No se pudo agregar historial\n";
-                    send(clientSock, resp.c_str(), resp.size(), 0);
                     break;
                 }
                 case CMD_SALIR:
@@ -139,12 +139,11 @@ int main() {
                     send(clientSock, response.c_str(), (int)response.size(), 0);
                     goto cleanup;
                 default:
-                    response = "ERR|Comando desconocido\n";
+                    response = procesarComando(req);
             }
-            // ── Loggear respuesta ──────────────────────────────────
+
             srvLog << "[RES] " << response;
             srvLog.flush();
-            // ─────────────────────────────────────────────────────────
             send(clientSock, response.c_str(), (int)response.size(), 0);
         }
         else if (iResult == 0) {
