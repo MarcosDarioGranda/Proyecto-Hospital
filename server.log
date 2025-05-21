@@ -9,3 +9,5 @@
 [RES] OK|1|a|Diabetes tipo 2
 [REQ] AGREGAR_HISTORIAL|2|alzehimer
 [RES] [REQ] SALIR
+[INIT] Servidor arrancado
+[REQ] SALIR
