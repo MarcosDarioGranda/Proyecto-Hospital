@@ -31,7 +31,7 @@ int main() {
 
     iResult = WSAStartup(MAKEWORD(2,2), &wsaData);
     if (iResult != 0) {
-        cerr << "WSAStartup falló: " << iResult << "\n";
+        cerr << "WSAStartup fallo: " << iResult << "\n";
         return 1;
     }
 
@@ -40,14 +40,14 @@ int main() {
     hints.ai_socktype = SOCK_STREAM;
     iResult = getaddrinfo(SERVER_ADDRESS, DEFAULT_PORT, &hints, &serverInfo);
     if (iResult != 0) {
-        cerr << "getaddrinfo falló: " << iResult << "\n";
+        cerr << "getaddrinfo fallo: " << iResult << "\n";
         WSACleanup();
         return 1;
     }
 
     SOCKET connSock = socket(serverInfo->ai_family, serverInfo->ai_socktype, serverInfo->ai_protocol);
     if (connSock == INVALID_SOCKET) {
-        cerr << "socket() falló: " << WSAGetLastError() << "\n";
+        cerr << "socket() fallo: " << WSAGetLastError() << "\n";
         freeaddrinfo(serverInfo);
         WSACleanup();
         return 1;
@@ -56,7 +56,7 @@ int main() {
     iResult = connect(connSock, serverInfo->ai_addr, (int)serverInfo->ai_addrlen);
     freeaddrinfo(serverInfo);
     if (iResult == SOCKET_ERROR) {
-        cerr << "connect() falló: " << WSAGetLastError() << "\n";
+        cerr << "connect() fallo: " << WSAGetLastError() << "\n";
         closesocket(connSock);
         WSACleanup();
         return 1;
@@ -71,7 +71,7 @@ int main() {
     cout << "Contraseña: ";
     getline(cin, clave);
 
-    string loginCmd = "LOGIN " + usuario + " " + clave;
+    string loginCmd = "LOGIN|" + usuario + "|" + clave + "\r\n";
     send(connSock, loginCmd.c_str(), loginCmd.length(), 0);
 
     char recvbuf[BUFFER_SIZE];
@@ -161,7 +161,7 @@ int main() {
                 salir = true;
                 break;
             default:
-                cout << "Opción no válida.\n";
+                cout << "Opcion no valida.\n";
         }
     }
 

@@ -11,7 +11,7 @@
 
 #define DEFAULT_PORT "6000"
 #define BUFFER_SIZE 2048
-#define DB_PATH "data/hospital.db"
+#define DB_PATH "BD_HOSPITAL"
 
 using namespace std;
 
@@ -28,7 +28,7 @@ string listarPacientes() {
     sqlite3* db = abrirBaseDeDatos();
     if (!db) return "Error al abrir la base de datos.";
 
-    string query = "SELECT id, nombre, fecha_nac, direccion, tlfn FROM paciente;";
+    string query = "SELECT id, nombre, fecha_nac, dir, TF FROM paciente;";
     sqlite3_stmt* stmt;
     string resultado;
 
@@ -53,7 +53,7 @@ string buscarPacientePorID(const string& id_str) {
     sqlite3* db = abrirBaseDeDatos();
     if (!db) return "Error al abrir la base de datos.";
 
-    string query = "SELECT id, nombre, fecha_nac, direccion, tlfn FROM paciente WHERE id = ?;";
+    string query = "SELECT id, nombre, fecha_nac, dir, TF FROM paciente WHERE id = ?;";
     sqlite3_stmt* stmt;
     string resultado;
 
@@ -88,7 +88,7 @@ string anyadirPaciente(const string& datos) {
     getline(ss, direccion, ',');
     getline(ss, tlfn);
 
-    string query = "INSERT INTO paciente (nombre, fecha_nac, direccion, tlfn) VALUES (?, ?, ?, ?);";
+    string query = "INSERT INTO paciente (nombre, fecha_nac, dir, TF) VALUES (?, ?, ?, ?);";
     sqlite3_stmt* stmt;
 
     if (sqlite3_prepare_v2(db, query.c_str(), -1, &stmt, nullptr) == SQLITE_OK) {
@@ -100,13 +100,13 @@ string anyadirPaciente(const string& datos) {
         if (sqlite3_step(stmt) == SQLITE_DONE) {
             sqlite3_finalize(stmt);
             sqlite3_close(db);
-            return "Paciente añadido con éxito.\n";
+            return "Paciente anyadido con exito.\n";
         }
     }
 
     sqlite3_finalize(stmt);
     sqlite3_close(db);
-    return "Error al añadir paciente.\n";
+    return "Error al anyadir paciente.\n";
 }
 
 string modificarPaciente(const string& datos) {
@@ -121,7 +121,7 @@ string modificarPaciente(const string& datos) {
     getline(ss, direccion, ',');
     getline(ss, tlfn);
 
-    string query = "UPDATE paciente SET nombre=?, fecha_nac=?, direccion=?, tlfn=? WHERE id=?;";
+    string query = "UPDATE paciente SET nombre=?, fecha_nac=?, dir=?, TF=? WHERE id=?;";
     sqlite3_stmt* stmt;
 
     if (sqlite3_prepare_v2(db, query.c_str(), -1, &stmt, nullptr) == SQLITE_OK) {

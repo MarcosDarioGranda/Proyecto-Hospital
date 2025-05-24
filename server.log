@@ -14,3 +14,143 @@
 [INIT] Servidor arrancado
 [INIT] Servidor arrancado
 [REQ] LOGIN aimar 3210
+[INIT] Servidor arrancado
+[REQ] LOGIN aimar 3210
+[INIT] Servidor arrancado
+[REQ] LOGIN aimar 3210
+[INIT] Servidor arrancado
+[REQ] LOGIN aimar 3210
+[INIT] Servidor arrancado
+[REQ] LOGIN aimar 3210
+[INIT] Servidor arrancado
+[REQ] LOGIN aimar 3210
+[INIT] Servidor arrancado
+[REQ] LOGIN aimar 3210
+[INIT] Servidor arrancado
+[REQ] LOGIN aimar 3210
+[INIT] Servidor arrancado
+[REQ] LOGIN|aimar|3210
+
+[INIT] Servidor arrancado
+[REQ] LOGIN|58013746|3210
+
+[INIT] Servidor arrancado
+[REQ] LOGIN|aimar|3210
+
+[INIT] Servidor arrancado
+[REQ] LOGIN|aimar|3210
+
+[INIT] Servidor arrancado
+[REQ] LOGIN|aimar|3210
+
+[INIT] Servidor arrancado
+[REQ] LOGIN|aimar|3210
+
+[INIT] Servidor arrancado
+[REQ] LOGIN|aimar|3210
+
+[INIT] Servidor arrancado
+[REQ] LOGIN|aimar|3210
+
+[INIT] Servidor arrancado
+[REQ] LOGIN|aimar|3210
+
+[INIT] Servidor arrancado
+[REQ] LOGIN|aimar|3210
+
+[INIT] Servidor arrancado
+[REQ] LOGIN|aimar|3210
+
+[INIT] Servidor arrancado
+[REQ] LOGIN|aimar|3210
+
+[INIT] Servidor arrancado
+[REQ] LOGIN|aimar|3210
+
+[INIT] Servidor arrancado
+[REQ] LOGIN|aimar|3210
+
+[INIT] Servidor arrancado
+[REQ] LOGIN|aimar|3210
+
+[INIT] Servidor arrancado
+[REQ] LOGIN|aimar|3210
+
+[INIT] Servidor arrancado
+[REQ] LOGIN|aimar|3210
+
+[INIT] Servidor arrancado
+[REQ] LOGIN|aimar|3210
+
+[INIT] Servidor arrancado
+[REQ] LOGIN|aimar|3210
+
+[INIT] Servidor arrancado
+[REQ] LOGIN|aimar|3210
+
+[INIT] Servidor arrancado
+[REQ] LOGIN|aimar|3210
+
+[INIT] Servidor arrancado
+[REQ] LOGIN|aimar|3210
+
+[INIT] Servidor arrancado
+[REQ] LOGIN|aimar|3210
+
+[INIT] Servidor arrancado
+[REQ] LOGIN|aimar|3210
+
+[INIT] Servidor arrancado
+[REQ] LOGIN|aimar|3210
+
+[INIT] Servidor arrancado
+[REQ] LOGIN|aimar|3210
+[INIT] Servidor arrancado
+[REQ] LOGIN|aimar|3210
+[INIT] Servidor arrancado
+[REQ] LOGIN|aimar|3210
+[REQ] CONSULTA_HISTORIAL|3
+[RES] OK|ERR: No se encontraron historiales para ese paciente
+[REQ] SALIR
+[INIT] Servidor arrancado
+[REQ] LOGIN|prueba|0000
+[REQ] LISTAR_PACIENTES
+[RES] Error en consulta SELECT.[REQ] BUSCAR_PACIENTE 3
+[RES] Error en consulta SELECT.[REQ] SALIR
+[INIT] Servidor arrancado
+[REQ] LOGIN|aimar|3210
+[REQ] LISTAR_PACIENTES
+[RES] 2. a | 34 | 1cnei | 345547869
+3. lol | 1111-11-11 | asfsdasdasd | 29292929
+4. juan | 1020-02-02 | asdasdddd | 112233445
+5. aaa | aa | aa | 1977788935
+6. aa | naaa | asadsasd | 19191919
+[REQ] BUSCAR_PACIENTE 3
+[RES] 3. lol | 1111-11-11 | asfsdasdasd | 29292929
+[REQ] AÑADIR_PACIENTE jonka,01/04/2005,los fueros, 78964939
+[RES] Paciente anyadido con exito.
+[REQ] LISTAR_PACIENTES
+[RES] 2. a | 34 | 1cnei | 345547869
+3. lol | 1111-11-11 | asfsdasdasd | 29292929
+4. juan | 1020-02-02 | asdasdddd | 112233445
+5. aaa | aa | aa | 1977788935
+6. aa | naaa | asadsasd | 19191919
+7. jonka | 01/04/2005 | los fueros | 78964939
+[REQ] MODIFICAR_PACIENTE 5,juan,06/08/2006,santander,890236891
+[RES] Paciente modificado.
+[REQ] LISTAR_PACIENTES
+[RES] 2. a | 34 | 1cnei | 345547869
+3. lol | 1111-11-11 | asfsdasdasd | 29292929
+4. juan | 1020-02-02 | asdasdddd | 112233445
+5. juan | 06/08/2006 | santander | 890236891
+6. aa | naaa | asadsasd | 19191919
+7. jonka | 01/04/2005 | los fueros | 78964939
+[REQ] ELIMINAR_PACIENTE 2
+[RES] Paciente eliminado.
+[REQ] LISTAR_PACIENTES
+[RES] 3. lol | 1111-11-11 | asfsdasdasd | 29292929
+4. juan | 1020-02-02 | asdasdddd | 112233445
+5. juan | 06/08/2006 | santander | 890236891
+6. aa | naaa | asadsasd | 19191919
+7. jonka | 01/04/2005 | los fueros | 78964939
+[REQ] SALIR

@@ -3,6 +3,7 @@
 #include <winsock2.h>
 #include "menu.h"
 
+#include "protocolo.h"          
 using namespace std;
 
 void loginYMenu(int socket) {
@@ -12,8 +13,8 @@ void loginYMenu(int socket) {
     cout << "Contraseña: ";
     getline(cin, clave);
 
-    string comando = "LOGIN " + usuario + " " + clave;
-    send(socket, comando.c_str(), comando.length(), 0);
+    string comando = formatRequest(CMD_LOGIN, {usuario, clave});
+    send(socket, comando.c_str(), comando.size(), 0);
 
     char buffer[2048];
     int n = recv(socket, buffer, sizeof(buffer) - 1, 0);

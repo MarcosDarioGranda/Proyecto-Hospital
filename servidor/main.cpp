@@ -33,7 +33,7 @@ std::ofstream srvLog("server.log", std::ios::app);
     WSADATA wsaData;
     int iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
     if (iResult != 0) {
-        std::cerr << "WSAStartup falló: " << iResult << "\n";
+        std::cerr << "WSAStartup fallo: " << iResult << "\n";
         return 1;
     }
 
@@ -46,7 +46,7 @@ std::ofstream srvLog("server.log", std::ios::app);
 
     iResult = getaddrinfo(nullptr, DEFAULT_PORT, &hints, &addrResult);
     if (iResult != 0) {
-        std::cerr << "getaddrinfo falló: " << iResult << "\n";
+        std::cerr << "getaddrinfo fallo: " << iResult << "\n";
         WSACleanup();
         return 1;
     }
@@ -57,7 +57,7 @@ std::ofstream srvLog("server.log", std::ios::app);
         addrResult->ai_protocol
     );
     if (listenSock == INVALID_SOCKET) {
-        std::cerr << "socket() falló: " << WSAGetLastError() << "\n";
+        std::cerr << "socket() fallo: " << WSAGetLastError() << "\n";
         freeaddrinfo(addrResult);
         WSACleanup();
         return 1;
@@ -66,7 +66,7 @@ std::ofstream srvLog("server.log", std::ios::app);
     iResult = bind(listenSock, addrResult->ai_addr, (int)addrResult->ai_addrlen);
     freeaddrinfo(addrResult);
     if (iResult == SOCKET_ERROR) {
-        std::cerr << "bind() falló: " << WSAGetLastError() << "\n";
+        std::cerr << "bind() fallo: " << WSAGetLastError() << "\n";
         closesocket(listenSock);
         WSACleanup();
         return 1;
@@ -74,7 +74,7 @@ std::ofstream srvLog("server.log", std::ios::app);
 
     iResult = listen(listenSock, BACKLOG);
     if (iResult == SOCKET_ERROR) {
-        std::cerr << "listen() falló: " << WSAGetLastError() << "\n";
+        std::cerr << "listen() fallo: " << WSAGetLastError() << "\n";
         closesocket(listenSock);
         WSACleanup();
         return 1;
@@ -96,27 +96,35 @@ std::ofstream srvLog("server.log", std::ios::app);
         if (iResult > 0) {
             buffer[iResult] = '\0';
             std::string req(buffer);
-
+            while (!req.empty() && (req.back() == '\r' || req.back() == '\n'))
+            req.pop_back(); 
             srvLog << "[REQ] " << req << "\n";
             srvLog.flush();
-
             std::string response;
-
+            // --- DEBUGGING LOGIN ---
             if (req.rfind("LOGIN", 0) == 0) {
                 auto f = splitFields(req);
+                std::cerr << "[DEBUG] raw req='" << req << "'\n";
+                std::cerr << "[DEBUG] campos recibidos: " << f.size() << "\n";
+                for (size_t i = 0; i < f.size(); ++i) {
+                    std::cerr << "  campo[" << i << "]='" << f[i] << "'\n";
+                }
+
+                std::string response;
                 if (f.size() < 3) {
-                    response = "ERR|Faltan parámetros\n";
-                } else {
+                    response = "ERR|Faltan parametros\n";
+                }else {
                     std::string rol;
                     if (validarLogin(f[1], f[2], rol)) {
                         response = "OK|" + rol + "\n";
                     } else {
-                        response = "ERR|Usuario o contraseña incorrectos\n";
+                        response = "ERR|Usuario o contrasenya incorrectos\n";
                     }
                 }
                 send(clientSock, response.c_str(), response.size(), 0);
                 continue;
             }
+            // ... resto
 
             Command cmd = parseCommand(req);
             switch (cmd) {
@@ -132,7 +140,7 @@ std::ofstream srvLog("server.log", std::ios::app);
                 case CMD_AGREGAR_HISTORIAL: {
                     auto f = splitFields(req);
                     if (f.size() < 3) {
-                        response = "ERR|Parámetros insuficientes para AGREGAR_HISTORIAL\n";
+                        response = "ERR|Parametros insuficientes para AGREGAR_HISTORIAL\n";
                         break;
                     }
                     int id = std::stoi(f[1]);
@@ -144,7 +152,7 @@ std::ofstream srvLog("server.log", std::ios::app);
                     break;
                 }
                 case CMD_SALIR:
-                    response = "OK|Adiós\n";
+                    response = "OK|Adios\n";
                     send(clientSock, response.c_str(), (int)response.size(), 0);
                     goto cleanup;
                 default:
@@ -156,11 +164,11 @@ std::ofstream srvLog("server.log", std::ios::app);
             send(clientSock, response.c_str(), (int)response.size(), 0);
         }
         else if (iResult == 0) {
-            std::cout << "Conexión cerrada por el cliente.\n";
+            std::cout << "Conexion cerrada por el cliente.\n";
             break;
         }
         else {
-            std::cerr << "recv() falló: " << WSAGetLastError() << "\n";
+            std::cerr << "recv() fallo: " << WSAGetLastError() << "\n";
             break;
         }
     }

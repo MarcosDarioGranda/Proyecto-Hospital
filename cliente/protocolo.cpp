@@ -7,9 +7,11 @@ std::vector<std::string> splitFields(const std::string& line) {
         fields.push_back(line.substr(start, pos - start));
         start = pos + 1;
     }
-    // quitar el '\n' final si existe
+    // quitar '\r' y '\n' finales si existen
     std::string last = line.substr(start);
-    if (!last.empty() && last.back()=='\n') last.pop_back();
+    while (!last.empty() && (last.back() == '\n' || last.back() == '\r')) {
+        last.pop_back();
+    }
     fields.push_back(last);
     return fields;
 }
