@@ -220,3 +220,6 @@
 6. aa | naaa | asadsasd | 19191919
 7. jonka | 01/04/2005 | los fueros | 78964939
 [REQ] SALIR
+[INIT] Servidor arrancado
+[REQ] LOGIN|prueba|0000
+[REQ] SALIR
