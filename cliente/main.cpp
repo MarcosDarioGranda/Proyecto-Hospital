@@ -68,7 +68,7 @@ int main() {
     string usuario, clave, rol;
     cout << "Usuario: ";
     getline(cin, usuario);
-    cout << "Contraseña: ";
+    cout << "Contrasenya: ";
     getline(cin, clave);
 
     string loginCmd = "LOGIN|" + usuario + "|" + clave + "\r\n";
@@ -96,7 +96,7 @@ int main() {
 
     bool salir = false;
     while (!salir) {
-        cout << "\n1) Consultar historial\n2) Agregar historial\n3) Gestión de pacientes\n4) Salir\n> ";
+        cout << "\n1) Consultar historial\n2) Agregar historial\n3) Gestion de pacientes\n4) Salir\n> ";
         int opcion; cin >> opcion;
         cin.ignore();
 
@@ -109,7 +109,7 @@ int main() {
 
                 auto it = cacheHistorial.find(id);
                 if (it != cacheHistorial.end()) {
-                    cout << "(desde caché)\n";
+                    cout << "(desde cache)\n";
                     for (auto &linea : it->second)
                         cout << linea << "\n";
                 } else {

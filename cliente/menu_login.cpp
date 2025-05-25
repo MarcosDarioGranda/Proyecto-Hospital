@@ -10,7 +10,7 @@ void loginYMenu(int socket) {
     string usuario, clave;
     cout << "Usuario: ";
     getline(cin, usuario);
-    cout << "Contraseña: ";
+    cout << "Contrasenya: ";
     getline(cin, clave);
 
     string comando = formatRequest(CMD_LOGIN, {usuario, clave});
@@ -19,7 +19,7 @@ void loginYMenu(int socket) {
     char buffer[2048];
     int n = recv(socket, buffer, sizeof(buffer) - 1, 0);
     if (n <= 0) {
-        cerr << "Error en la conexión o respuesta.\n";
+        cerr << "Error en la conexion o respuesta.\n";
         return;
     }
     buffer[n] = '\0';

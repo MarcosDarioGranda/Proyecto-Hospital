@@ -178,3 +178,45 @@
 [REQ] CONSULTA_HISTORIAL|7
 [RES] OK|5|jonka|hombro salido
 [REQ] SALIR
+[INIT] Servidor arrancado
+[REQ] LOGIN|prueba|0000
+[REQ] CONSULTA_HISTORIAL|7
+[RES] OK|5|jonka|hombro salido
+[REQ] CONSULTA_HISTORIAL|1
+[RES] OK|ERR: No se encontraron historiales para ese paciente
+[REQ] CONSULTA_HISTORIAL|2
+[RES] OK|ERR: No se encontraron historiales para ese paciente
+[REQ] CONSULTA_HISTORIAL|3
+[RES] OK|ERR: No se encontraron historiales para ese paciente
+[REQ] CONSULTA_HISTORIAL|4
+[RES] OK|2|juan|Nauseas
+[REQ] CONSULTA_HISTORIAL|5
+[RES] OK|ERR: No se encontraron historiales para ese paciente
+[REQ] CONSULTA_HISTORIAL|6
+[RES] OK|4|aa|alergia a los acaros
+[REQ] AGREGAR_HISTORIAL|1|alzehimer
+[RES] ERR|No se pudo agregar historial
+[REQ] SALIR
+[INIT] Servidor arrancado
+[REQ] LOGIN|prueba|0000
+[REQ] CONSULTA_HISTORIAL|4
+[RES] OK|2|juan|Nauseas
+[REQ] AGREGAR_HISTORIAL|9|prueba
+[RES] OK|Historial agregado
+[REQ] CONSULTA_HISTORIAL|9
+[RES] OK|ERR: No se encontraron historiales para ese paciente
+[REQ] CONSULTA_HISTORIAL|8
+[RES] OK|ERR: No se encontraron historiales para ese paciente
+[REQ] AGREGAR_HISTORIAL|4|rotura del ligamento cruzado
+[RES] ERR|No se pudo agregar historial
+[REQ] AGREGAR_HISTORIAL|2|rotura ligamento cruzado
+[RES] ERR|No se pudo agregar historial
+[REQ] CONSULTA_HISTORIAL|2
+[RES] OK|ERR: No se encontraron historiales para ese paciente
+[REQ] LISTAR_PACIENTES
+[RES] 3. lol | 1111-11-11 | asfsdasdasd | 29292929
+4. juan | 1020-02-02 | asdasdddd | 112233445
+5. juan | 06/08/2006 | santander | 890236891
+6. aa | naaa | asadsasd | 19191919
+7. jonka | 01/04/2005 | los fueros | 78964939
+[REQ] SALIR

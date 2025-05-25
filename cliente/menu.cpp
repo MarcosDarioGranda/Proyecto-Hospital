@@ -21,9 +21,9 @@ string recibirRespuesta(int socket) {
 void mostrarMenuPacientes(int socket) {
     int opcion;
     do {
-        cout << "\n--- Menú Principal ---\n";
-        cout << "1. Ver lista de pacientes\n2. Buscar paciente por ID\n3. Añadir nuevo paciente\n4. Modificar paciente existente\n5. Eliminar paciente\n6. Salir\n";
-        cout << "Seleccione una opción: ";
+        cout << "\n--- Menu Principal ---\n";
+        cout << "1. Ver lista de pacientes\n2. Buscar paciente por ID\n3. Anyadir nuevo paciente\n4. Modificar paciente existente\n5. Eliminar paciente\n6. Salir\n";
+        cout << "Seleccione una opcion: ";
         cin >> opcion;
         cin.ignore();
 
@@ -56,10 +56,10 @@ void mostrarMenuPacientes(int socket) {
                 break;
             case 6:
                 comando = "SALIR";
-                cout << "Cerrando conexión...\n";
+                cout << "Cerrando conexion...\n";
                 break;
             default:
-                cout << "Opción no válida.\n";
+                cout << "Opción no valida.\n";
                 continue;
         }
 
