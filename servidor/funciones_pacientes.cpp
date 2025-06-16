@@ -6,6 +6,8 @@
 #include <sstream>
 #include <cstring>
 #include "../lib/src/bd/sqlite3.h"
+#include "clases/Paciente.h"
+#include "clases/Persona.h"
 
 #pragma comment(lib, "Ws2_32.lib")
 
@@ -25,28 +27,38 @@ sqlite3* abrirBaseDeDatos() {
 }
 
 string listarPacientes() {
-    sqlite3* db = abrirBaseDeDatos();
-    if (!db) return "Error al abrir la base de datos.";
-
-    string query = "SELECT id, nombre, fecha_nac, dir, TF FROM paciente;";
-    sqlite3_stmt* stmt;
-    string resultado;
-
-    if (sqlite3_prepare_v2(db, query.c_str(), -1, &stmt, nullptr) == SQLITE_OK) {
-        while (sqlite3_step(stmt) == SQLITE_ROW) {
-            resultado += to_string(sqlite3_column_int(stmt, 0)) + ". ";
-            resultado += (const char*)sqlite3_column_text(stmt, 1);
-            resultado += " | " + string((const char*)sqlite3_column_text(stmt, 2));
-            resultado += " | " + string((const char*)sqlite3_column_text(stmt, 3));
-            resultado += " | " + to_string(sqlite3_column_int(stmt, 4)) + "\n";
-        }
-    } else {
-        resultado = "Error en consulta SELECT.";
+    sqlite3* db;
+    if (sqlite3_open("BD_HOSPITAL", &db) != SQLITE_OK) {
+        return "Error al abrir la base de datos.";
     }
 
-    sqlite3_finalize(stmt);
+    const char* query = "SELECT id, nombre, fecha_nac, dir, TF FROM paciente;";
+    sqlite3_stmt* stmt;
+    vector<Paciente*> pacientes;
+    ostringstream resultado;
+
+    if (sqlite3_prepare_v2(db, query, -1, &stmt, nullptr) == SQLITE_OK) {
+        while (sqlite3_step(stmt) == SQLITE_ROW) {
+            int id = sqlite3_column_int(stmt, 0);
+            std::string nombre = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 1));
+            std::string fecha = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 2));
+            std::string direccion = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 3));
+            int telefono = sqlite3_column_int(stmt, 4);
+
+            Paciente* p = new Paciente(id, nombre, fecha, direccion, telefono);
+            pacientes.push_back(p);
+        }
+        sqlite3_finalize(stmt);
+    }
+
     sqlite3_close(db);
-    return resultado.empty() ? "No hay pacientes.\n" : resultado;
+
+    for (const auto& p : pacientes) {
+        resultado << static_cast<Paciente*>(p)->toString() << "\n";
+        delete p; // liberar memoria
+    }
+
+    return resultado.str();
 }
 
 string buscarPacientePorID(const string& id_str) {

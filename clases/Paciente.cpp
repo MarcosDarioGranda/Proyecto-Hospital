@@ -12,19 +12,18 @@ Paciente::Paciente(int id, const string& nombre,
 Paciente::~Paciente(){
 
 }
-
 void Paciente::imprimir() const {
-        std::cout << "[Paciente] ID: " << id
+        cout << "[Paciente] ID: " << id
                   << ", Nombre: " << nombre
                   << ", Fecha de nacimiento: " << fechaNacimiento
                   << ", Dirección: " << direccion
-                  << ", Teléfono: " << telefono << std::endl;
+                  << ", Teléfono: " << telefono << endl;
 }
 
 string Paciente::toString() const {
-        return "[Paciente] ID: " + std::to_string(id) +
+        return "[Paciente] ID: " + to_string(id) +
                ", Nombre: " + nombre +
                ", Fecha de nacimiento: " + fechaNacimiento +
                ", Dirección: " + direccion +
-               ", Teléfono: " + std::to_string(telefono);
-    }
+               ", Teléfono: " + to_string(telefono);
+}

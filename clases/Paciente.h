@@ -8,9 +8,9 @@ class Paciente : public Persona {
     string direccion;
     int telefono;
 public:
-    Paciente(int id, const std::string& nombre,
-             const std::string& fechaNacimiento,
-             const std::string& direccion,
+    Paciente(int id, const string& nombre,
+             const string& fechaNacimiento,
+             const string& direccion,
              int telefono);
     ~Paciente();
     void imprimir() const override;
