@@ -14,6 +14,7 @@ public:
              int telefono);
     ~Paciente();
     void imprimir() const override;
+    string toString() const;
 };
 
 #endif

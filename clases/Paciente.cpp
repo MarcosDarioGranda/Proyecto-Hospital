@@ -20,3 +20,11 @@ void Paciente::imprimir() const {
                   << ", Dirección: " << direccion
                   << ", Teléfono: " << telefono << std::endl;
 }
+
+string Paciente::toString() const {
+        return "[Paciente] ID: " + std::to_string(id) +
+               ", Nombre: " + nombre +
+               ", Fecha de nacimiento: " + fechaNacimiento +
+               ", Dirección: " + direccion +
+               ", Teléfono: " + std::to_string(telefono);
+    }
