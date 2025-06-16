@@ -5,6 +5,7 @@ set SRC_LIB=lib\src
 set INC_LIB=lib\include
 set LIB_OUT=lib
 set OBJ_OUT=obj
+set CLASES=clases
 
 if not exist %OBJ_OUT% mkdir %OBJ_OUT%
 
@@ -27,6 +28,18 @@ for %%F in (
 )
 
 echo --------------------------------------------------
+echo 1.5) Compilando clases C++ (orientadas a objetos)
+echo --------------------------------------------------
+for %%F in (
+  "%CLASES%\Persona.cpp"
+  "%CLASES%\Paciente.cpp"
+  "%CLASES%\Usuario.cpp"
+) do (
+  echo Compilando %%~nxF
+  g++ -c "%%F" -I"%INC_LIB%" -I"%CLASES%" -o "%OBJ_OUT%\%%~nF.o" || goto :Error
+)
+
+echo --------------------------------------------------
 echo 2) Empaquetando libhospital.a
 echo --------------------------------------------------
 if exist "%LIB_OUT%\libhospital.a" del /q "%LIB_OUT%\libhospital.a"
@@ -43,9 +56,10 @@ g++ ^
   servidor/protocolo.cpp ^
   servidor/login.cpp ^
   servidor/funciones_pacientes.cpp ^
-  -I"%INC_LIB%" ^
+  -I"%INC_LIB%" -I"%CLASES%" ^
   -L"%LIB_OUT%" -lhospital -lws2_32 ^
   -o servidor.exe || goto :Error
+
 echo --------------------------------------------------
 echo 4) Compilando Cliente.exe
 echo --------------------------------------------------
@@ -54,7 +68,7 @@ g++ ^
   cliente\protocolo.cpp ^
   cliente\menu.cpp ^
   cliente\menu_login.cpp ^
-  -I"%INC_LIB%" ^
+  -I"%INC_LIB%" -I"%CLASES%" ^
   -L"%LIB_OUT%" -lhospital -lws2_32 ^
   -o cliente.exe || goto :Error
 
