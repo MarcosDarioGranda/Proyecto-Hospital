@@ -26,6 +26,7 @@ sqlite3* abrirBaseDeDatos() {
     return db;
 }
 
+//implementada con oo
 string listarPacientes() {
     sqlite3* db;
     if (sqlite3_open("BD_HOSPITAL", &db) != SQLITE_OK) {
@@ -60,28 +61,35 @@ string listarPacientes() {
 
     return resultado.str();
 }
-
+//implementada con oo
 string buscarPacientePorID(const string& id_str) {
     sqlite3* db = abrirBaseDeDatos();
-    if (!db) return "Error al abrir la base de datos.";
+    if (!db) return "Error al abrir la base de datos.\n";
 
     string query = "SELECT id, nombre, fecha_nac, dir, TF FROM paciente WHERE id = ?;";
     sqlite3_stmt* stmt;
     string resultado;
 
     if (sqlite3_prepare_v2(db, query.c_str(), -1, &stmt, nullptr) == SQLITE_OK) {
+        // Convertir el id a int y enlazar
         sqlite3_bind_int(stmt, 1, stoi(id_str));
+
+        // Si se encuentra un resultado
         if (sqlite3_step(stmt) == SQLITE_ROW) {
-            resultado += to_string(sqlite3_column_int(stmt, 0)) + ". ";
-            resultado += (const char*)sqlite3_column_text(stmt, 1);
-            resultado += " | " + string((const char*)sqlite3_column_text(stmt, 2));
-            resultado += " | " + string((const char*)sqlite3_column_text(stmt, 3));
-            resultado += " | " + to_string(sqlite3_column_int(stmt, 4)) + "\n";
+            int id = sqlite3_column_int(stmt, 0);
+            string nombre = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 1));
+            string fechaNacimiento = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 2));
+            string direccion = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 3));
+            int telefono = sqlite3_column_int(stmt, 4);
+
+            // Crear objeto Paciente
+            Paciente paciente(id, nombre, fechaNacimiento, direccion, telefono);
+            resultado = paciente.toString();
         } else {
             resultado = "Paciente no encontrado.\n";
         }
     } else {
-        resultado = "Error en consulta SELECT.";
+        resultado = "Error en consulta SELECT.\n";
     }
 
     sqlite3_finalize(stmt);
