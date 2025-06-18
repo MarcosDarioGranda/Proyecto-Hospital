@@ -97,25 +97,21 @@ string buscarPacientePorID(const string& id_str) {
     return resultado;
 }
 
+//implementada con oo
 string anyadirPaciente(const string& datos) {
     sqlite3* db = abrirBaseDeDatos();
-    if (!db) return "Error al abrir la base de datos.";
+    if (!db) return "Error al abrir la base de datos.\n";
 
-    stringstream ss(datos);
-    string nombre, fecha, direccion, tlfn;
-    getline(ss, nombre, ',');
-    getline(ss, fecha, ',');
-    getline(ss, direccion, ',');
-    getline(ss, tlfn);
+    Paciente paciente = Paciente::fromCSV(datos);
 
     string query = "INSERT INTO paciente (nombre, fecha_nac, dir, TF) VALUES (?, ?, ?, ?);";
     sqlite3_stmt* stmt;
 
     if (sqlite3_prepare_v2(db, query.c_str(), -1, &stmt, nullptr) == SQLITE_OK) {
-        sqlite3_bind_text(stmt, 1, nombre.c_str(), -1, SQLITE_STATIC);
-        sqlite3_bind_text(stmt, 2, fecha.c_str(), -1, SQLITE_STATIC);
-        sqlite3_bind_text(stmt, 3, direccion.c_str(), -1, SQLITE_STATIC);
-        sqlite3_bind_int(stmt, 4, stoi(tlfn));
+        sqlite3_bind_text(stmt, 1, paciente.getNombre().c_str(), -1, SQLITE_STATIC);
+        sqlite3_bind_text(stmt, 2, paciente.getFechaNacimiento().c_str(), -1, SQLITE_STATIC);
+        sqlite3_bind_text(stmt, 3, paciente.getDireccion().c_str(), -1, SQLITE_STATIC);
+        sqlite3_bind_int(stmt, 4, paciente.getTelefono());
 
         if (sqlite3_step(stmt) == SQLITE_DONE) {
             sqlite3_finalize(stmt);
@@ -126,7 +122,7 @@ string anyadirPaciente(const string& datos) {
 
     sqlite3_finalize(stmt);
     sqlite3_close(db);
-    return "Error al anyadir paciente.\n";
+    return "Error al añadir paciente.\n";
 }
 
 string modificarPaciente(const string& datos) {

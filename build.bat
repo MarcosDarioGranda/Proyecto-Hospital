@@ -33,7 +33,7 @@ echo --------------------------------------------------
 for %%F in (
   "%CLASES%\Persona.cpp"
   "%CLASES%\Paciente.cpp"
-  "%CLASES%\Usuario.cpp"
+  "%CLASES%\Medico.cpp"
 ) do (
   echo Compilando %%~nxF
   g++ -c "%%F" -I"%INC_LIB%" -I"%CLASES%" -o "%OBJ_OUT%\%%~nF.o" || goto :Error

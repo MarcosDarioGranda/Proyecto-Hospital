@@ -1,7 +1,7 @@
-#include "Usuario.h"
+#include "Medico.h"
 #include <iostream>
 
-Usuario::Usuario(int id, const string& nombre,
+Medico::Medico(int id, const string& nombre,
             const string& correo,
             const string& contrasenya,
             const string& rol,
@@ -12,11 +12,11 @@ Usuario::Usuario(int id, const string& nombre,
                 this->especialidad = especialidad;
         }
 
-Usuario::~Usuario() {
+Medico::~Medico() {
 
 }
 
-void Usuario::imprimir() const  {
+void Medico::imprimir() const  {
         std::cout << "[Usuario] ID: " << id
                   << ", Nombre: " << nombre
                   << ", Correo: " << correo
