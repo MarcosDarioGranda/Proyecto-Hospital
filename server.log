@@ -271,3 +271,18 @@
 [Paciente] ID: 7, Nombre: jonka, Fecha de nacimiento: 01/04/2005, Direccion: los fueros, Telefono: 78964939
 [Paciente] ID: 8, Nombre: antonio, Fecha de nacimiento: 01-06-1965, Direccion: circuito de jarama, Telefono: 123456789
 [REQ] SALIR
+[INIT] Servidor arrancado
+[REQ] LOGIN|aimar|3210
+[REQ] CONSULTA_HISTORIAL|4
+[RES] OK|2|juan|Nauseas
+[REQ] AGREGAR_HISTORIAL|4|rinoplastia
+[RES] ERR|No se pudo agregar historial
+[REQ] LISTAR_PACIENTES
+[RES] [Paciente] ID: 3, Nombre: lol, Fecha de nacimiento: 1111-11-11, Direccion: asfsdasdasd, Telefono: 29292929
+[Paciente] ID: 4, Nombre: juan, Fecha de nacimiento: 1020-02-02, Direccion: asdasdddd, Telefono: 112233445
+[Paciente] ID: 5, Nombre: juan, Fecha de nacimiento: 06/08/2006, Direccion: santander, Telefono: 890236891
+[Paciente] ID: 6, Nombre: aa, Fecha de nacimiento: naaa, Direccion: asadsasd, Telefono: 19191919
+[Paciente] ID: 7, Nombre: jonka, Fecha de nacimiento: 01/04/2005, Direccion: los fueros, Telefono: 78964939
+[Paciente] ID: 8, Nombre: antonio, Fecha de nacimiento: 01-06-1965, Direccion: circuito de jarama, Telefono: 123456789
+[REQ] BUSCAR_PACIENTE 5
+[RES] [Paciente] ID: 5, Nombre: juan, Fecha de nacimiento: 06/08/2006, Direccion: santander, Telefono: 890236891[REQ] SALIR

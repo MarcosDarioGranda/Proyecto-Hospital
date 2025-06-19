@@ -16,7 +16,7 @@ bool validarLogin(const string& nombre, const string& contrasenya, string& rol_o
         return false;
     }
 
-    // Asegúrate de usar el nombre de tabla y columnas que existen en tu BD:
+    // Asegura de usar el nombre de tabla y columnas que existen en tu BD:
     const char* sql = 
         "SELECT rol "
         "FROM Medico "
