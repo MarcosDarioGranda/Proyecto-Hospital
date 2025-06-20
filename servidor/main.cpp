@@ -124,7 +124,7 @@ std::ofstream srvLog("server.log", std::ios::app);
                 send(clientSock, response.c_str(), response.size(), 0);
                 continue;
             }
-            // ... resto
+            
 
             Command cmd = parseCommand(req);
             switch (cmd) {
