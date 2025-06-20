@@ -18,7 +18,6 @@ public:
 
     static Paciente fromCSV(const string& datos);
 
-    // Getters si no los tenés:
     string getFechaNacimiento() const { return fechaNacimiento; }
     string getDireccion() const { return direccion; }
     int getTelefono() const { return telefono; }

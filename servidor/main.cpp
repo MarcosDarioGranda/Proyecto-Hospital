@@ -13,7 +13,7 @@
 #include "../lib/include/hospital.h"
 #include "login.h"
 
-#include "funciones_pacientes.h"
+#include "../funciones/funciones_pacientes.h"
 
 #pragma comment(lib, "Ws2_32.lib")
 

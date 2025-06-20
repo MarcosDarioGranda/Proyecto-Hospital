@@ -34,9 +34,22 @@ for %%F in (
   "%CLASES%\Persona.cpp"
   "%CLASES%\Paciente.cpp"
   "%CLASES%\Medico.cpp"
+  "%CLASES%\HistorialMedico.cpp"
+  "%CLASES%\Cita.cpp"
 ) do (
   echo Compilando %%~nxF
   g++ -c "%%F" -I"%INC_LIB%" -I"%CLASES%" -o "%OBJ_OUT%\%%~nF.o" || goto :Error
+)
+echo --------------------------------------------------
+echo 1.6) Compilando funciones (funciones_*.cpp)
+echo --------------------------------------------------
+for %%F in (
+  "funciones\\funciones_pacientes.cpp"
+  "funciones\\funciones_citas.cpp"
+  "funciones\\funciones_historiales.cpp"
+) do (
+  echo Compilando %%~nxF
+  g++ -c "%%F" -I"%INC_LIB%" -I"clases" -o "obj\\%%~nF.o" || goto :Error
 )
 
 echo --------------------------------------------------
@@ -55,7 +68,6 @@ g++ ^
   servidor/main.cpp ^
   servidor/protocolo.cpp ^
   servidor/login.cpp ^
-  servidor/funciones_pacientes.cpp ^
   -I"%INC_LIB%" -I"%CLASES%" ^
   -L"%LIB_OUT%" -lhospital -lws2_32 ^
   -o servidor.exe || goto :Error

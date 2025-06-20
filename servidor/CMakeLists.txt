@@ -7,7 +7,6 @@ add_executable(Servidor
     main.cpp
     protocolo.cpp
     login.cpp
-    funciones_pacientes.cpp
 )
 
 target_include_directories(Servidor PRIVATE

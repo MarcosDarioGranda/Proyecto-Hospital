@@ -18,5 +18,6 @@ target_include_directories(Cliente PRIVATE
 target_link_libraries(Cliente PRIVATE
     ws2_32
     hospital
+    funciones
 )
 
