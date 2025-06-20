@@ -27,13 +27,12 @@ string HistorialMedico::toString() const {
 
 HistorialMedico HistorialMedico::fromCSV(const string& datosCSV) {
     stringstream ss(datosCSV);
-    string idStr, idPacStr, descripcion, fecha;
+    string idStr, idPacStr, descripcion;
 
     getline(ss, idStr, ',');
     getline(ss, idPacStr, ',');
     getline(ss, descripcion, ',');
-    getline(ss, fecha);
-
+    
     return HistorialMedico(
         stoi(idStr),
         stoi(idPacStr),

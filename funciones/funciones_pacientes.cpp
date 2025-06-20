@@ -8,7 +8,7 @@
 #include "../lib/src/bd/sqlite3.h"
 #include "../clases/Paciente.h"
 #include "../clases/Persona.h"
-
+#include "funciones_pacientes.h"
 #pragma comment(lib, "Ws2_32.lib")
 
 #define DEFAULT_PORT "6000"
