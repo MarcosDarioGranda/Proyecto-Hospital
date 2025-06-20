@@ -11,4 +11,5 @@ string agregarHistorial(const string& datos);
 string modificarHistorial(const string& datos);
 string eliminarHistorial(const string& id_str);
 
+
 #endif
