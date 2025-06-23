@@ -318,3 +318,6 @@
 [INIT] Servidor arrancado
 [REQ] LOGIN|aimar|3210
 [REQ] SALIR
+[INIT] Servidor arrancado
+[REQ] LOGIN|aimar|3210
+[REQ] SALIR
