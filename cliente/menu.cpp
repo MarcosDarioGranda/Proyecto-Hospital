@@ -18,9 +18,7 @@ string recibirRespuesta(int socket) {
     return string(buffer);
 }
 
-void mostrarMenuPacientes(int socket);
-void mostrarMenuCitas(int socket);
-void mostrarMenuHistorial(int socket);
+
 
 void mostrarMenuPacientes(int socket) {
     int opcion;
