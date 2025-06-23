@@ -286,3 +286,21 @@
 [Paciente] ID: 8, Nombre: antonio, Fecha de nacimiento: 01-06-1965, Direccion: circuito de jarama, Telefono: 123456789
 [REQ] BUSCAR_PACIENTE 5
 [RES] [Paciente] ID: 5, Nombre: juan, Fecha de nacimiento: 06/08/2006, Direccion: santander, Telefono: 890236891[REQ] SALIR
+[INIT] Servidor arrancado
+[REQ] LOGIN|Marcos|1234
+[INIT] Servidor arrancado
+[REQ] LOGIN|aimar|3210
+[REQ] CONSULTA_HISTORIAL|1
+[RES] OK|ERR: No se encontraron historiales para ese paciente
+[REQ] MODIFICAR_HISTORIAL 12
+[RES] Comando no reconocido
+[REQ] CONSULTAR_CITAS_MEDICO 1
+[RES] Comando no reconocido
+[REQ] CONSULTAR_CITAS_MEDICO 1234
+[RES] Comando no reconocido
+[REQ] ELIMINAR_CITA 1234
+[RES] Comando no reconocido
+[REQ] ELIMINAR_CITA 0001
+[RES] Comando no reconocido
+[INIT] Servidor arrancado
+[REQ] LOGIN|aimar|3210

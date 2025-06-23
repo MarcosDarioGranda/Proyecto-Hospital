@@ -24,16 +24,16 @@ void mostrarMenuPacientes(int socket) {
         cout << "\n--- Menu Principal ---\n";
         cout << "1. Ver lista de pacientes\n";
         cout << "2. Buscar paciente por ID\n";
-        cout << "3. Añadir nuevo paciente\n";
+        cout << "3. Anyadir nuevo paciente\n";
         cout << "4. Modificar paciente existente\n";
         cout << "5. Eliminar paciente\n";
         cout << "6. Ver citas por paciente\n";
         cout << "7. Ver citas por médico\n";
-        cout << "8. Añadir nueva cita\n";
+        cout << "8. Anyadir nueva cita\n";
         cout << "9. Modificar cita existente\n";
         cout << "10. Eliminar cita\n";
         cout << "11. Consultar historial médico de paciente\n";
-        cout << "12. Añadir historial médico\n";
+        cout << "12. Anyadir historial médico\n";
         cout << "13. Modificar historial médico\n";
         cout << "14. Eliminar historial médico\n";
 
