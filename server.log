@@ -321,3 +321,14 @@
 [INIT] Servidor arrancado
 [REQ] LOGIN|aimar|3210
 [REQ] SALIR
+[INIT] Servidor arrancado
+[REQ] LOGIN|aimar|3210
+[REQ] CONSULTA_HISTORIAL|3
+[RES] OK|ERR: No se encontraron historiales para ese paciente
+[REQ] CONSULTA_HISTORIAL|2
+[RES] OK|ERR: No se encontraron historiales para ese paciente
+[REQ] CONSULTA_HISTORIAL|5
+[RES] OK|ERR: No se encontraron historiales para ese paciente
+[REQ] AGREGAR_HISTORIAL|3|alopecia
+[RES] OK|Historial agregado
+[REQ] SALIR
