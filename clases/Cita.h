@@ -14,6 +14,7 @@ class Cita {
 
 public:
     Cita(int id, int idPaciente, int idMedico, const string& fechaHora, const string& estado);
+    Cita(): id(0), idPaciente(0), idMedico(0), fechaHora(""), estado("") {};
     ~Cita();
 
     int getId() const;
@@ -23,7 +24,7 @@ public:
     string getEstado() const;
 
     string toString() const;
-    static Cita fromCSV(const string& datos);
+    static Cita fromCSV(const string& datos, bool esModificar);
 };
 
 #endif

@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include <winsock2.h>
 #include <ws2tcpip.h>
@@ -11,7 +10,7 @@
 #include "../clases/Persona.h"
 #include "../clases/HistorialMedico.h"
 #include "funciones_historiales.h"
-#include <algorithm>  
+#include <algorithm>
 #include <cctype>
 #pragma comment(lib, "Ws2_32.lib")
 
@@ -20,7 +19,6 @@
 #define DB_PATH "BD_HOSPITAL"
 
 using namespace std;
-
 
 static sqlite3* abrirBaseDeDatos() {
     sqlite3* db;
@@ -68,15 +66,18 @@ string consultarHistorialDelPaciente(const string& id_str) {
     return resultado.empty() ? "No se encontraron historiales." : resultado;
 }
 
-
 string agregarHistorial(const string& datos) {
     sqlite3* db = abrirBaseDeDatos();
     if (!db) return "Error al abrir la base de datos.\n";
 
-    // 1. Parsear la línea CSV → objeto HistorialMedico
-    HistorialMedico historial = HistorialMedico::fromCSV(datos);
+    HistorialMedico historial(0, 0, "");
+    try {
+        historial = HistorialMedico::fromCSV(datos);
+    } catch (const std::exception& e) {
+        sqlite3_close(db);
+        return string("Error en formato de datos para agregar historial: ") + e.what() + "\n";
+    }
 
-    // 2. Sentencia SQL
     string query =
         "INSERT INTO HistClinica (paciente_id, antecedente) "
         "VALUES (?, ?);";
@@ -89,7 +90,7 @@ string agregarHistorial(const string& datos) {
         if (sqlite3_step(stmt) == SQLITE_DONE) {
             sqlite3_finalize(stmt);
             sqlite3_close(db);
-            return "Historial anyadido con exito.\n";
+            return "Historial añadido con éxito.\n";
         }
     }
 
@@ -102,10 +103,14 @@ string modificarHistorial(const string& datos) {
     sqlite3* db = abrirBaseDeDatos();
     if (!db) return "Error al abrir la base de datos.\n";
 
-    // 1. Parsear línea CSV → objeto HistorialMedico
-    HistorialMedico historial = HistorialMedico::fromCSV(datos);
+    HistorialMedico historial(0, 0, "");
+    try {
+        historial = HistorialMedico::fromCSV(datos);
+    } catch (const std::exception& e) {
+        sqlite3_close(db);
+        return string("Error en formato de datos para modificar historial: ") + e.what() + "\n";
+    }
 
-    // 2. Sentencia SQL: actualiza TODOS los campos
     string query =
         "UPDATE HistClinica "
         "SET paciente_id = ?, antecedente = ? "
@@ -115,14 +120,13 @@ string modificarHistorial(const string& datos) {
     if (sqlite3_prepare_v2(db, query.c_str(), -1, &stmt, nullptr) == SQLITE_OK) {
         sqlite3_bind_int(stmt, 1, historial.getIdPaciente());
         sqlite3_bind_text(stmt, 2, historial.getAntecedente().c_str(), -1, SQLITE_STATIC);
-        sqlite3_bind_int(stmt, 3, historial.getId());     // id del registro a modificar
+        sqlite3_bind_int(stmt, 3, historial.getId());
 
         if (sqlite3_step(stmt) == SQLITE_DONE) {
-            // ¿Se modificó realmente una fila?
             if (sqlite3_changes(db) > 0) {
                 sqlite3_finalize(stmt);
                 sqlite3_close(db);
-                return "Historial modificado con exito.\n";
+                return "Historial modificado con éxito.\n";
             } else {
                 sqlite3_finalize(stmt);
                 sqlite3_close(db);
@@ -136,12 +140,10 @@ string modificarHistorial(const string& datos) {
     return "Error al modificar historial.\n";
 }
 
-
 string eliminarHistorial(const string& id_str) {
     sqlite3* db = abrirBaseDeDatos();
     if (!db) return "Error al abrir la base de datos.\n";
 
-    // Validar que el ID sea numérico
     if (id_str.empty() || !std::all_of(id_str.begin(), id_str.end(), [](unsigned char c) { return std::isdigit(c); })) {
         sqlite3_close(db);
         return "ID inválido. Debe ser un número.\n";
@@ -172,6 +174,7 @@ string eliminarHistorial(const string& id_str) {
     sqlite3_close(db);
     return "Error al eliminar historial.\n";
 }
+
 string procesarComandoHistoriales(const string& entrada) {
     istringstream iss(entrada);
     string comando;
@@ -187,4 +190,3 @@ string procesarComandoHistoriales(const string& entrada) {
     if (comando == "SALIR")                return "Desconectando...\n";
     return "Comando no reconocido\n";
 }
-

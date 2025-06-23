@@ -161,7 +161,7 @@ string agregarCita(const string& datos) {
     sqlite3* db = abrirBaseDeDatos();
     if (!db) return "Error al abrir la base de datos.\n";
 
-    Cita cita = Cita::fromCSV(datos);
+    Cita cita = Cita::fromCSV(datos, false);
 
     // Verificar existencia de paciente y médico
     if (!verificarPacienteExiste(db, cita.getIdPaciente())) {
@@ -203,28 +203,20 @@ string modificarCita(const string& datos) {
     sqlite3* db = abrirBaseDeDatos();
     if (!db) return "Error al abrir la base de datos.\n";
 
-    //Parsear CSV 
-    stringstream ss(datos);
-    string idStr, fecha, estado, medicoStr;
-    getline(ss, idStr,   ',');
-    getline(ss, fecha,   ',');
-    getline(ss, estado,  ',');
-    getline(ss, medicoStr, ',');        // puede quedar vacío
-
-    if (idStr.empty() || fecha.empty() || estado.empty() ||
-        !all_of(idStr.begin(), idStr.end(), ::isdigit)) {
+    Cita cita;
+    try {
+        // Construye directamente el objeto con el CSV (modo modificar)
+        cita = Cita::fromCSV(datos, true);
+    } catch (const exception& e) {
         sqlite3_close(db);
-        return "Formato incorrecto.\n";
+        return string("Error al parsear los datos: ") + e.what() + "\n";
     }
 
-    int idCita   = stoi(idStr);
-    bool cambiarMedico = !medicoStr.empty();
-    int idMedico = cambiarMedico ? stoi(medicoStr) : 0;
+    int idCita = cita.getId();
 
-    //Ver si la cita existe
+    // Verificar si la cita existe
     const char* sqlFind =
-        "SELECT id, paciente_id, fecha, medico_id, estado "
-        "FROM Cita WHERE id = ?;";
+        "SELECT id FROM Cita WHERE id = ?;";
     sqlite3_stmt* stmtFind;
 
     if (sqlite3_prepare_v2(db, sqlFind, -1, &stmtFind, nullptr) != SQLITE_OK) {
@@ -240,15 +232,15 @@ string modificarCita(const string& datos) {
         return "La cita no existe.\n";
     }
 
-    //si se detecta que hay cambio de médico, se cambia también
-    if (cambiarMedico && !verificarMedicoExiste(db, idMedico)) {
+    // Si se cambia médico, verificar que exista
+    bool cambiarMedico = cita.getIdMedico() > 0;
+    if (cambiarMedico && !verificarMedicoExiste(db, cita.getIdMedico())) {
         sqlite3_close(db);
         return "El nuevo médico no existe.\n";
     }
 
-    //se hace el slq, se añade el medico si este tambien esta en los datos pasados
-    string sqlUpdate =
-        "UPDATE Cita SET fecha = ?, estado = ?";
+    // Construir consulta UPDATE
+    string sqlUpdate = "UPDATE Cita SET fecha = ?, estado = ?";
     if (cambiarMedico) sqlUpdate += ", medico_id = ?";
     sqlUpdate += " WHERE id = ?;";
 
@@ -258,14 +250,12 @@ string modificarCita(const string& datos) {
         return "Error al preparar la actualización.\n";
     }
 
-    // Bind de parámetros
     int idx = 1;
-    sqlite3_bind_text(stmtUp, idx++, fecha.c_str(),  -1, SQLITE_STATIC);
-    sqlite3_bind_text(stmtUp, idx++, estado.c_str(), -1, SQLITE_STATIC);
-    if (cambiarMedico) sqlite3_bind_int(stmtUp, idx++, idMedico);
-    sqlite3_bind_int(stmtUp, idx, idCita);  // último parámetro: id
+    sqlite3_bind_text(stmtUp, idx++, cita.getFechaHora().c_str(), -1, SQLITE_STATIC);
+    sqlite3_bind_text(stmtUp, idx++, cita.getEstado().c_str(), -1, SQLITE_STATIC);
+    if (cambiarMedico) sqlite3_bind_int(stmtUp, idx++, cita.getIdMedico());
+    sqlite3_bind_int(stmtUp, idx, idCita);
 
-    //Ejecución
     string respuesta;
     if (sqlite3_step(stmtUp) == SQLITE_DONE) {
         respuesta = sqlite3_changes(db) > 0
@@ -279,6 +269,8 @@ string modificarCita(const string& datos) {
     sqlite3_close(db);
     return respuesta;
 }
+
+
 
 
 string eliminarCita(const string& id_str) {

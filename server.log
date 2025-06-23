@@ -437,3 +437,155 @@
 [REQ] ANADIR_PACIENTE endika,12-08-2007,lamiako,829648103
 [RES] Comando no reconocido
 [REQ] ANADIR_CITA 7,24-12-2025,pendiente
+[INIT] Servidor arrancado
+[REQ] LOGIN|aimar|3210
+[REQ] LISTAR_PACIENTES
+[RES] [Paciente] ID: 3, Nombre: lol, Fecha de nacimiento: 1111-11-11, Direccion: asfsdasdasd, Telefono: 29292929
+[Paciente] ID: 4, Nombre: juan, Fecha de nacimiento: 1020-02-02, Direccion: asdasdddd, Telefono: 112233445
+[Paciente] ID: 5, Nombre: juan, Fecha de nacimiento: 06/08/2006, Direccion: santander, Telefono: 890236891
+[Paciente] ID: 6, Nombre: aa, Fecha de nacimiento: naaa, Direccion: asadsasd, Telefono: 19191919
+[Paciente] ID: 7, Nombre: jonka, Fecha de nacimiento: 01/04/2005, Direccion: los fueros, Telefono: 78964939
+[REQ] CONSULTAR_CITAS_PACIENTE 1
+[RES] Paciente no encontrado.
+[REQ] CONSULTAR_CITAS_PACIENTE 2
+[RES] Paciente no encontrado.
+[REQ] CONSULTAR_CITAS_MEDICO 58013746
+[RES] ID: 3, Paciente: 3, Fecha: 2021-12-19, Médico: 58013746, Estado: atendido
+[REQ] ANADIR_CITA 1,14-06-2005,58013746,pendiente
+[RES] Error: el paciente no existe.
+[REQ] ANADIR_CITA 3,14-06-2005,58013746,pendiente
+[RES] Error: el paciente no existe.
+[REQ] LISTAR_PACIENTES
+[RES] [Paciente] ID: 3, Nombre: lol, Fecha de nacimiento: 1111-11-11, Direccion: asfsdasdasd, Telefono: 29292929
+[Paciente] ID: 4, Nombre: juan, Fecha de nacimiento: 1020-02-02, Direccion: asdasdddd, Telefono: 112233445
+[Paciente] ID: 5, Nombre: juan, Fecha de nacimiento: 06/08/2006, Direccion: santander, Telefono: 890236891
+[Paciente] ID: 6, Nombre: aa, Fecha de nacimiento: naaa, Direccion: asadsasd, Telefono: 19191919
+[Paciente] ID: 7, Nombre: jonka, Fecha de nacimiento: 01/04/2005, Direccion: los fueros, Telefono: 78964939
+[REQ] CONSULTAR_CITAS_PACIENTE 6
+[RES] No hay citas para este paciente.
+[REQ] CONSULTAR_CITAS_PACIENTE 3
+[RES] ID: 3, Paciente: 3, Fecha: 2021-12-19, Médico: 58013746, Estado: atendido
+[REQ] CONSULTAR_CITAS_PACIENTE 4
+[RES] No hay citas para este paciente.
+[REQ] CONSULTAR_CITAS_PACIENTE 5
+[RES] No hay citas para este paciente.
+[REQ] CONSULTAR_CITAS_PACIENTE 6
+[RES] No hay citas para este paciente.
+[REQ] CONSULTAR_CITAS_PACIENTE 7
+[RES] No hay citas para este paciente.
+[REQ] ANADIR_CITA 4,1111,58013746,pendiente
+[RES] Error: el paciente no existe.
+[REQ] MODIFICAR_CITA 1
+[RES] Formato incorrecto.
+[REQ] CONSULTAR_CITAS_PACIENTE 2
+[RES] Paciente no encontrado.
+[REQ] CONSULTAR_CITAS_PACIENTE 3
+[RES] ID: 3, Paciente: 3, Fecha: 2021-12-19, Médico: 58013746, Estado: atendido
+[REQ] CONSULTAR_CITAS_PACIENTE 4
+[RES] No hay citas para este paciente.
+[INIT] Servidor arrancado
+[REQ] LOGIN|3210|
+[INIT] Servidor arrancado
+[REQ] LOGIN|aimar|3210
+[REQ] CONSULTAR_HISTORIAL 3
+[RES] ID: 7, Paciente ID: 3, Nombre: lol, Antecedente: alopecia
+[REQ] CONSULTAR_HISTORIAL 2
+[RES] No se encontraron historiales.[REQ] CONSULTAR_HISTORIAL 1
+[RES] No se encontraron historiales.[REQ] CONSULTAR_HISTORIAL 4
+[RES] ID: 2, Paciente ID: 4, Nombre: juan, Antecedente: Nauseas
+[REQ] ANADIR_HISTORIAL 4,fiebre
+[INIT] Servidor arrancado
+[REQ] LOGIN|aimar|3210
+[REQ] CONSULTAR_HISTORIAL 4
+[RES] ID: 2, Paciente ID: 4, Nombre: juan, Antecedente: Nauseas
+[REQ] SALIR
+[INIT] Servidor arrancado
+[REQ] LOGIN|aimar|3210
+[REQ] CONSULTAR_HISTORIAL 4
+[RES] ID: 2, Paciente ID: 4, Nombre: juan, Antecedente: Nauseas
+[REQ] ANADIR_HISTORIAL 3,asma
+[RES] Error al añadir historial. No se ha conectado correctamente, o el paciente no existe.
+[REQ] MODIFICAR_HISTORIAL 1,12345
+[RES] No se encontró el historial especificado.
+[REQ] SALIR
+[INIT] Servidor arrancado
+[REQ] LOGIN|aimar|3210
+[REQ] ANADIR_HISTORIAL 1,,1,juan
+[RES] Error en formato de datos para agregar historial: Error: Número de campos inválido. Se esperaban 2 o 3 campos.
+[REQ] ANADIR_HISTORIAL 5,sida
+[RES] Historial añadido con éxito.
+[REQ] ELIMINAR_HISTORIAL 1
+[RES] Historial eliminado con éxito.
+[REQ] ANADIR_HISTORIAL 4, alergia al polvo
+[RES] Error al añadir historial. No se ha conectado correctamente, o el paciente no existe.
+[REQ] MODIFICAR_HISTORIAL 5,2,sibo
+[RES] Historial modificado con éxito.
+[REQ] CONSULTAR_CITAS_PACIENTE 2
+[RES] Paciente no encontrado.
+[REQ] CONSULTAR_CITAS_PACIENTE 5
+[RES] No hay citas para este paciente.
+[REQ] CONSULTAR_CITAS_PACIENTE 2
+[RES] Paciente no encontrado.
+[REQ] CONSULTA_HISTORIAL|1
+[RES] OK|ERR: No se encontraron historiales para ese paciente
+[REQ] ELIMINAR_PACIENTE 4
+[RES] Paciente eliminado.
+[REQ] ANADIR_CITA 3,101010,58013746,curado
+[RES] Error: el paciente no existe.
+[REQ] CONSULTAR_CITAS_MEDICO 58013746
+[RES] ID: 3, Paciente: 3, Fecha: 2021-12-19, Médico: 58013746, Estado: atendido
+[REQ] CONSULTAR_CITAS_MEDICO 88888888
+[RES] No hay citas para este médico.
+[REQ] ANADIR_PACIENTE aimar,202020,vitoria(peru),999999999
+[RES] Comando no reconocido
+[REQ] ANADIR_PACIENTE aaa,15-20-20,xd,888888888
+[RES] Comando no reconocido
+[REQ] BUSCAR_PACIENTE 4
+[RES] Paciente no encontrado.
+[REQ] ANADIR_PACIENTE a
+[RES] Comando no reconocido
+[REQ] BUSCAR_PACIENTE 5
+[RES] [Paciente] ID: 5, Nombre: juan, Fecha de nacimiento: 06/08/2006, Direccion: santander, Telefono: 890236891[REQ] CONSULTAR_HISTORIAL 4
+[RES] No se encontraron historiales.[REQ] CONSULTAR_HISTORIAL 6
+[RES] ID: 4, Paciente ID: 6, Nombre: aa, Antecedente: alergia a los acaros
+[REQ] CONSULTAR_HISTORIAL 7
+[RES] No se encontraron historiales.[REQ] ANADIR_HISTORIAL 3,alopecia2
+[RES] Error al añadir historial. No se ha conectado correctamente, o el paciente no existe.
+[REQ] BUSCAR_PACIENTE 3
+[RES] [Paciente] ID: 3, Nombre: lol, Fecha de nacimiento: 1111-11-11, Direccion: asfsdasdasd, Telefono: 29292929[REQ] BUSCAR_PACIENTE 4
+[RES] Paciente no encontrado.
+[REQ] BUSCAR_PACIENTE 7
+[RES] [Paciente] ID: 7, Nombre: jonka, Fecha de nacimiento: 01/04/2005, Direccion: los fueros, Telefono: 78964939[REQ] CONSULTAR_CITAS_PACIENTE 5
+[RES] No hay citas para este paciente.
+[REQ] CONSULTAR_CITAS_PACIENTE 4
+[RES] Paciente no encontrado.
+[REQ] MODIFICAR_CITA 
+[RES] Formato incorrecto.
+[REQ] CONSULTAR_CITAS_MEDICO 33333333
+[RES] ID: 4, Paciente: 2, Fecha: 1234, Médico: 33333333, Estado: pendiente
+[REQ] CONSULTAR_CITAS_MEDICO 88888888
+[RES] No hay citas para este médico.
+[REQ] CONSULTAR_CITAS_PACIENTE 3
+[RES] ID: 3, Paciente: 3, Fecha: 2021-12-19, Médico: 58013746, Estado: atendido
+[REQ] ANADIR_CITA 3,10-10-10,33333333,pendiente
+[RES] Error: el paciente no existe.
+[REQ] MODIFICAR_CITA 1
+[RES] Formato incorrecto.
+[REQ] ELIMINAR_CITA 1
+[RES] La cita no existe.
+[REQ] ANADIR_HISTORIAL 3,asd
+[RES] Error al añadir historial. No se ha conectado correctamente, o el paciente no existe.
+[REQ] SALIR
+[INIT] Servidor arrancado
+[REQ] LOGIN|aimar|3210
+[REQ] MODIFICAR_CITA 3,10-10-10,pendiente
+[RES] Error al modificar la cita: database is locked
+[REQ] MODIFICAR_CITA 3,10-10-10,pendiente
+[RES] Cita modificada con éxito.
+[REQ] ANADIR_CITA 5,10-10-10,58013746,pendiente
+[RES] Cita agregada con éxito.
+[REQ] CONSULTAR_CITAS_PACIENTE 3
+[RES] ID: 3, Paciente: 3, Fecha: 10-10-10, Médico: 58013746, Estado: pendiente
+[REQ] CONSULTAR_CITAS_PACIENTE 4
+[RES] Paciente no encontrado.
+[REQ] SALIR
