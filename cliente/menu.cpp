@@ -65,9 +65,7 @@ void mostrarMenuPacientes(int socket) {
                 comando = "ELIMINAR_PACIENTE " + input;
                 break;
             case 6:
-                comando = "SALIR";
-                cout << "Cerrando conexión...\n";
-                break;
+                return;
             default:
                 cout << "Opción no válida.\n";
                 continue;
