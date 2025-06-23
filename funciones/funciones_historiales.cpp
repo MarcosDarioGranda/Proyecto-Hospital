@@ -22,7 +22,7 @@
 using namespace std;
 
 
-sqlite3* abrirBaseDeDatos() {
+static sqlite3* abrirBaseDeDatos() {
     sqlite3* db;
     if (sqlite3_open(DB_PATH, &db) != SQLITE_OK) {
         cerr << "Error abriendo la base de datos: " << sqlite3_errmsg(db) << endl;
