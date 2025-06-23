@@ -22,7 +22,7 @@
 
 using namespace std;
 
-sqlite3* abrirBaseDeDatos() {
+static sqlite3* abrirBaseDeDatos() {
     sqlite3* db;
     if (sqlite3_open(DB_PATH, &db) != SQLITE_OK) {
         cerr << "Error abriendo la base de datos: " << sqlite3_errmsg(db) << endl;
@@ -332,4 +332,20 @@ string eliminarCita(const string& id_str) {
     sqlite3_finalize(stmtEliminar);
     sqlite3_close(db);
     return resultado;
+}
+string procesarComandoCitas(const string& entrada) {
+    istringstream iss(entrada);
+    string comando; 
+    iss >> comando;
+    string argumentos;
+    getline(iss, argumentos);
+    if (!argumentos.empty() && argumentos[0]==' ') argumentos.erase(0,1);
+
+    if (comando == "CONSULTAR_CITAS_PACIENTE") return consultarCitasPorPaciente(argumentos);
+    if (comando == "CONSULTAR_CITAS_MEDICO")  return consultarCitasPorMedico(argumentos);
+    if (comando == "ANADIR_CITA")             return agregarCita(argumentos);
+    if (comando == "MODIFICAR_CITA")          return modificarCita(argumentos);
+    if (comando == "ELIMINAR_CITA")           return eliminarCita(argumentos);
+    if (comando == "SALIR")                   return "Desconectando...\n";
+    return "Comando no reconocido\n";
 }

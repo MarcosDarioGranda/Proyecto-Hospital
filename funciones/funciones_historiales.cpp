@@ -12,7 +12,7 @@
 #include "../clases/HistorialMedico.h"
 #include "funciones_historiales.h"
 #include <algorithm>  
-#include <cctype> 
+#include <cctype>
 #pragma comment(lib, "Ws2_32.lib")
 
 #define DEFAULT_PORT "6000"
@@ -171,5 +171,20 @@ string eliminarHistorial(const string& id_str) {
     sqlite3_finalize(stmt);
     sqlite3_close(db);
     return "Error al eliminar historial.\n";
+}
+string procesarComandoHistoriales(const string& entrada) {
+    istringstream iss(entrada);
+    string comando;
+    iss >> comando;
+    string argumentos;
+    getline(iss, argumentos);
+    if (!argumentos.empty() && argumentos[0]==' ') argumentos.erase(0,1);
+
+    if (comando == "CONSULTAR_HISTORIAL") return consultarHistorialDelPaciente(argumentos);
+    if (comando == "ANADIR_HISTORIAL")      return agregarHistorial(argumentos);
+    if (comando == "MODIFICAR_HISTORIAL")  return modificarHistorial(argumentos);
+    if (comando == "ELIMINAR_HISTORIAL")   return eliminarHistorial(argumentos);
+    if (comando == "SALIR")                return "Desconectando...\n";
+    return "Comando no reconocido\n";
 }
 

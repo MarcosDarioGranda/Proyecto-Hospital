@@ -5,11 +5,12 @@
 using namespace std;
 
 #pragma once
-sqlite3* abrirBaseDeDatos();
+static sqlite3* abrirBaseDeDatos();
 string consultarHistorialDelPaciente(const string& id_str);
 string agregarHistorial(const string& datos);
 string modificarHistorial(const string& datos);
 string eliminarHistorial(const string& id_str);
+string procesarComandoHistoriales(const string& entrada);
 
 
 #endif

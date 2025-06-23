@@ -7,13 +7,13 @@
 using namespace std;
 
 #pragma once
-sqlite3* abrirBaseDeDatos();
+static sqlite3* abrirBaseDeDatos();
 string listarPacientes();
 string buscarPacientePorID(const string& id_str);
 string anyadirPaciente(const string& datos);
 string modificarPaciente(const string& datos);
 string eliminarPaciente(const string& id_str);
-string procesarComando(const string& entrada);
+string procesarComandoPacientes(const string& entrada);
 void menuPacientes();
 
 #endif

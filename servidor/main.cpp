@@ -14,6 +14,9 @@
 #include "login.h"
 
 #include "../funciones/funciones_pacientes.h"
+#include "../funciones/funciones_citas.h"       
+#include "../funciones/funciones_historiales.h" 
+#include <io.h>
 
 #pragma comment(lib, "Ws2_32.lib")
 
@@ -117,11 +120,14 @@ std::ofstream srvLog("server.log", std::ios::app);
                     std::string rol;
                     if (validarLogin(f[1], f[2], rol)) {
                         response = "OK|" + rol + "\n";
+                        send(clientSock, response.c_str(), response.size(), 0);
                     } else {
                         response = "ERR|Usuario o contrasenya incorrectos\n";
+                            send(clientSock, response.c_str(), response.size(), 0);
+                            close(clientSock);
                     }
                 }
-                send(clientSock, response.c_str(), response.size(), 0);
+                //send(clientSock, response.c_str(), response.size(), 0);
                 continue;
             }
             
@@ -156,7 +162,40 @@ std::ofstream srvLog("server.log", std::ios::app);
                     send(clientSock, response.c_str(), (int)response.size(), 0);
                     goto cleanup;
                 default:
-                    response = procesarComando(req);
+           // --- Módulo Pacientes ---
+           if ( req.rfind("LISTAR_PACIENTES",0)==0 ||
+                req.rfind("BUSCAR_PACIENTE",0)==0  ||
+                req.rfind("ANADIR_PACIENTE",0)==0  ||
+                req.rfind("MODIFICAR_PACIENTE",0)==0||
+                req.rfind("ELIMINAR_PACIENTE",0)==0 )
+           {
+               response = procesarComandoPacientes(req);
+           }
+           // --- Módulo Citas ---
+           else if ( req.rfind("CONSULTAR_CITAS_PACIENTE",0)==0 ||
+                     req.rfind("CONSULTAR_CITAS_MEDICO",0)==0  ||
+                     req.rfind("ANADIR_CITA",0)==0            ||
+                     req.rfind("MODIFICAR_CITA",0)==0         ||
+                     req.rfind("ELIMINAR_CITA",0)==0 )
+           {
+               response = procesarComandoCitas(req);
+           }
+           // --- Módulo Historial ---
+           else if ( req.rfind("CONSULTAR_HISTORIAL",0)==0 ||
+                     req.rfind("ANADIR_HISTORIAL",0)==0    ||
+                     req.rfind("MODIFICAR_HISTORIAL",0)==0||
+                     req.rfind("ELIMINAR_HISTORIAL",0)==0 )
+           {
+               response = procesarComandoHistoriales(req);
+           }
+           // --- Ningún módulo reconoce el comando ---
+           else
+          {
+               response = "ERR|Comando no reconocido\n";
+           }
+
+           //send(clientSock, response.c_str(), response.size(), 0);
+          break;
             }
 
             srvLog << "[RES] " << response;

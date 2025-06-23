@@ -18,7 +18,7 @@
 
 using namespace std;
 
-sqlite3* abrirBaseDeDatos() {
+static sqlite3* abrirBaseDeDatos() {
     sqlite3* db;
     if (sqlite3_open(DB_PATH, &db) != SQLITE_OK) {
         cerr << "Error abriendo la base de datos: " << sqlite3_errmsg(db) << endl;
@@ -181,7 +181,7 @@ string eliminarPaciente(const string& id_str) {
     return "Error al eliminar paciente.\n";
 }
 
-string procesarComando(const string& entrada) {
+string procesarComandoPacientes(const string& entrada) {
     istringstream iss(entrada);
     string comando;
     iss >> comando;
@@ -234,7 +234,7 @@ void menuPacientes() {
         if (bytesRecibidos <= 0) break;
 
         string comando(recvbuf);
-        string respuesta = procesarComando(comando);
+        string respuesta = procesarComandoPacientes(comando);
         send(ClientSocket, respuesta.c_str(), (int)respuesta.length(), 0);
 
         if (comando.find("SALIR") == 0) break;

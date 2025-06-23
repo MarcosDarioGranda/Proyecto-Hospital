@@ -5,7 +5,7 @@
 using namespace std;
 
 #pragma once
-sqlite3* abrirBaseDeDatos();
+static sqlite3* abrirBaseDeDatos();
 string consultarCitasPorPaciente(const string& id_str);
 string consultarCitasPorMedico(const string& id_str);
 bool verificarPacienteExiste(sqlite3 *db, int idPaciente);
@@ -13,5 +13,6 @@ bool verificarMedicoExiste(sqlite3 *db, int idMedico);
 string agregarCita(const string& datos);
 string modificarCita(const string& datos);
 string eliminarCita(const string& id_str);
+string procesarComandoCitas(const string& entrada);
 
 #endif
