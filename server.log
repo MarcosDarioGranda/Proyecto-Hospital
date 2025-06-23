@@ -312,3 +312,9 @@
 [REQ] CONSULTA_HISTORIAL|5
 [RES] OK|ERR: No se encontraron historiales para ese paciente
 [REQ] SALIR
+[INIT] Servidor arrancado
+[REQ] LOGIN|aimar|3210
+[REQ] SALIR
+[INIT] Servidor arrancado
+[REQ] LOGIN|aimar|3210
+[REQ] SALIR

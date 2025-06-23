@@ -15,6 +15,11 @@
 #include "menu_login.h"
 #include "menu.h"
 
+void mostrarMenuPacientes(int socket);
+void mostrarMenuCitas(int socket);
+void mostrarMenuHistorial(int socket);
+
+
 #pragma comment(lib, "Ws2_32.lib")
 
 #define DEFAULT_PORT "6000"
@@ -96,7 +101,12 @@ int main() {
 
     bool salir = false;
     while (!salir) {
-        cout << "\n1) Consultar historial\n2) Agregar historial\n3) Gestion de pacientes\n4) Salir\n> ";
+        cout << "\n1) Consultar historial"
+         << "\n2) Agregar historial"
+         << "\n3) Gestion de pacientes"
+         << "\n4) Gestion de citas"
+         << "\n5) Gestion de historial"
+         << "\n6) Salir\n> ";
         int opcion; cin >> opcion;
         cin.ignore();
 
@@ -156,12 +166,18 @@ int main() {
                 mostrarMenuPacientes(connSock);
                 break;
             case 4:
+                mostrarMenuCitas(connSock);
+                break;
+            case 5:
+                mostrarMenuHistorial(connSock);
+                break;
+            case 6:
                 request = formatRequest(CMD_SALIR, {});
                 send(connSock, request.c_str(), (int)request.size(), 0);
                 salir = true;
                 break;
             default:
-                cout << "Opcion no valida.\n";
+                cout << "Opción no válida.\n";
         }
     }
 
