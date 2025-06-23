@@ -177,7 +177,7 @@ int main() {
                 salir = true;
                 break;
             default:
-                cout << "Opción no válida.\n";
+                cout << "Opcion no valida.\n";
         }
     }
 
