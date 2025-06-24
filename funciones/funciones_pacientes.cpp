@@ -104,26 +104,33 @@ string anyadirPaciente(const string& datos) {
     if (!db) return "Error al abrir la base de datos.\n";
 
     Paciente paciente = Paciente::fromCSV(datos);
+    const char* sql = 
+      "INSERT INTO paciente (nombre, fecha_nac, dir, TF) VALUES (?, ?, ?, ?);";
 
-    string query = "INSERT INTO paciente (nombre, fecha_nac, dir, TF) VALUES (?, ?, ?, ?);";
-    sqlite3_stmt* stmt;
-
-    if (sqlite3_prepare_v2(db, query.c_str(), -1, &stmt, nullptr) == SQLITE_OK) {
-        sqlite3_bind_text(stmt, 1, paciente.getNombre().c_str(), -1, SQLITE_STATIC);
-        sqlite3_bind_text(stmt, 2, paciente.getFechaNacimiento().c_str(), -1, SQLITE_STATIC);
-        sqlite3_bind_text(stmt, 3, paciente.getDireccion().c_str(), -1, SQLITE_STATIC);
-        sqlite3_bind_int(stmt, 4, paciente.getTelefono());
-
-        if (sqlite3_step(stmt) == SQLITE_DONE) {
-            sqlite3_finalize(stmt);
-            sqlite3_close(db);
-            return "Paciente anyadido con exito.\n";
-        }
+    sqlite3_stmt* stmt = nullptr;
+    int rc = sqlite3_prepare_v2(db, sql, -1, &stmt, nullptr);
+    if (rc != SQLITE_OK) {
+        string err = sqlite3_errmsg(db);
+        sqlite3_close(db);
+        return "Error al preparar INSERT: " + err + "\n";
     }
 
-    sqlite3_finalize(stmt);
-    sqlite3_close(db);
-    return "Error al añadir paciente.\n";
+    sqlite3_bind_text (stmt, 1, paciente.getNombre().c_str(),          -1, SQLITE_STATIC);
+    sqlite3_bind_text (stmt, 2, paciente.getFechaNacimiento().c_str(), -1, SQLITE_STATIC);
+    sqlite3_bind_text (stmt, 3, paciente.getDireccion().c_str(),       -1, SQLITE_STATIC);
+    sqlite3_bind_int  (stmt, 4, paciente.getTelefono());
+
+    rc = sqlite3_step(stmt);
+    if (rc == SQLITE_DONE) {
+        sqlite3_finalize(stmt);
+        sqlite3_close(db);
+        return "Paciente anyadido con éxito.\n";
+    } else {
+        string err = sqlite3_errmsg(db);
+        sqlite3_finalize(stmt);
+        sqlite3_close(db);
+        return "Error al insertar paciente: " + err + "\n";
+    }
 }
 
 string modificarPaciente(const string& datos) {
@@ -191,7 +198,7 @@ string procesarComandoPacientes(const string& entrada) {
 
     if (comando == "LISTAR_PACIENTES") return listarPacientes();
     if (comando == "BUSCAR_PACIENTE") return buscarPacientePorID(argumentos);
-    if (comando == "AÑADIR_PACIENTE") return anyadirPaciente(argumentos);
+    if (comando == "ANADIR_PACIENTE") return anyadirPaciente(argumentos);
     if (comando == "MODIFICAR_PACIENTE") return modificarPaciente(argumentos);
     if (comando == "ELIMINAR_PACIENTE") return eliminarPaciente(argumentos);
     if (comando == "SALIR") return "Desconectando...\n";

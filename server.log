@@ -683,3 +683,40 @@ ID: 6, Paciente: 3, Fecha: 12-07-2025, Médico: 88888888, Estado: pendiente
 [REQ] CONSULTAR_HISTORIAL 3
 [RES] ID: 7, Paciente ID: 3, Nombre: lol, Antecedente: alopecia
 [REQ] SALIR
+[INIT] Servidor arrancado
+[INIT] Servidor arrancado
+[REQ] LOGIN|prueba|0000
+[REQ] LISTAR_PACIENTES
+[RES] [Paciente] ID: 3, Nombre: lol, Fecha de nacimiento: 1111-11-11, Direccion: asfsdasdasd, Telefono: 29292929
+[Paciente] ID: 5, Nombre: juan, Fecha de nacimiento: 06/08/2006, Direccion: santander, Telefono: 890236891
+[Paciente] ID: 6, Nombre: pablo, Fecha de nacimiento: 12-09-1997, Direccion: abatxolo, Telefono: 678263017
+[Paciente] ID: 7, Nombre: jonka, Fecha de nacimiento: 01/04/2005, Direccion: los fueros, Telefono: 78964939
+[REQ] BUSCAR_PACIENTE 2
+[RES] Paciente no encontrado.
+[REQ] ANADIR_PACIENTE pablo,09-08-1997,abatxolo,672987163
+[RES] Comando no reconocido
+[REQ] SALIR
+[INIT] Servidor arrancado
+[REQ] LOGIN|prueba|0000
+[REQ] LISTAR_PACIENTES
+[RES] [Paciente] ID: 3, Nombre: lol, Fecha de nacimiento: 1111-11-11, Direccion: asfsdasdasd, Telefono: 29292929
+[Paciente] ID: 5, Nombre: juan, Fecha de nacimiento: 06/08/2006, Direccion: santander, Telefono: 890236891
+[Paciente] ID: 6, Nombre: pablo, Fecha de nacimiento: 12-09-1997, Direccion: abatxolo, Telefono: 678263017
+[Paciente] ID: 7, Nombre: jonka, Fecha de nacimiento: 01/04/2005, Direccion: los fueros, Telefono: 78964939
+[REQ] ANADIR_PACIENTE pablo,01-07-1997,abatxolo,6740284001
+[INIT] Servidor arrancado
+[REQ] LOGIN|prueba|0000
+[REQ] LISTAR_PACIENTES
+[RES] [Paciente] ID: 3, Nombre: lol, Fecha de nacimiento: 1111-11-11, Direccion: asfsdasdasd, Telefono: 29292929
+[Paciente] ID: 5, Nombre: juan, Fecha de nacimiento: 06/08/2006, Direccion: santander, Telefono: 890236891
+[Paciente] ID: 6, Nombre: pablo, Fecha de nacimiento: 12-09-1997, Direccion: abatxolo, Telefono: 678263017
+[Paciente] ID: 7, Nombre: jonka, Fecha de nacimiento: 01/04/2005, Direccion: los fueros, Telefono: 78964939
+[REQ] ANADIR_PACIENTE pablo,26-09-1995,abatxolo,689532263
+[RES] Paciente anyadido con éxito.
+[REQ] LISTAR_PACIENTES
+[RES] [Paciente] ID: 3, Nombre: lol, Fecha de nacimiento: 1111-11-11, Direccion: asfsdasdasd, Telefono: 29292929
+[Paciente] ID: 5, Nombre: juan, Fecha de nacimiento: 06/08/2006, Direccion: santander, Telefono: 890236891
+[Paciente] ID: 6, Nombre: pablo, Fecha de nacimiento: 12-09-1997, Direccion: abatxolo, Telefono: 678263017
+[Paciente] ID: 7, Nombre: jonka, Fecha de nacimiento: 01/04/2005, Direccion: los fueros, Telefono: 78964939
+[Paciente] ID: 9, Nombre: pablo, Fecha de nacimiento: 26-09-1995, Direccion: abatxolo, Telefono: 689532263
+[REQ] SALIR
