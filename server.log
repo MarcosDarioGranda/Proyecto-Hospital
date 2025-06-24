@@ -732,3 +732,91 @@ ID: 6, Paciente: 3, Fecha: 12-07-2025, Médico: 88888888, Estado: pendiente
 [INIT] Servidor arrancado
 [REQ] LOGIN|prueba|0000
 [REQ] SALIR
+[INIT] Servidor arrancado
+[REQ] LOGIN|prueba|0000
+[REQ] LISTAR_PACIENTES
+[RES] [Paciente] ID: 3, Nombre: lol, Fecha de nacimiento: 1111-11-11, Direccion: asfsdasdasd, Telefono: 29292929
+[Paciente] ID: 5, Nombre: juan, Fecha de nacimiento: 06/08/2006, Direccion: santander, Telefono: 890236891
+[Paciente] ID: 6, Nombre: pablo, Fecha de nacimiento: 12-09-1997, Direccion: abatxolo, Telefono: 678263017
+[Paciente] ID: 7, Nombre: jonka, Fecha de nacimiento: 01/04/2005, Direccion: los fueros, Telefono: 78964939
+[Paciente] ID: 9, Nombre: pablo, Fecha de nacimiento: 26-09-1995, Direccion: abatxolo, Telefono: 689532263
+[REQ] BUSCAR_PACIENTE 5
+[RES] [Paciente] ID: 5, Nombre: juan, Fecha de nacimiento: 06/08/2006, Direccion: santander, Telefono: 890236891[REQ] ANADIR_PACIENTE aimar,14-06-2005,ihurraldea 8,6489471055
+[INIT] Servidor arrancado
+[REQ] LOGIN|prueba|0000
+[REQ] ANADIR_PACIENTE aimar,14-06-2005,ihurraldea 8,648947105
+[RES] Paciente anyadido con éxito.
+[REQ] LISTAR_PACIENTES
+[RES] [Paciente] ID: 3, Nombre: lol, Fecha de nacimiento: 1111-11-11, Direccion: asfsdasdasd, Telefono: 29292929
+[Paciente] ID: 5, Nombre: juan, Fecha de nacimiento: 06/08/2006, Direccion: santander, Telefono: 890236891
+[Paciente] ID: 6, Nombre: pablo, Fecha de nacimiento: 12-09-1997, Direccion: abatxolo, Telefono: 678263017
+[Paciente] ID: 7, Nombre: jonka, Fecha de nacimiento: 01/04/2005, Direccion: los fueros, Telefono: 78964939
+[Paciente] ID: 9, Nombre: pablo, Fecha de nacimiento: 26-09-1995, Direccion: abatxolo, Telefono: 689532263
+[Paciente] ID: 10, Nombre: aimar, Fecha de nacimiento: 14-06-2005, Direccion: ihurraldea 8, Telefono: 648947105
+[REQ] MODIFICAR_PACIENTE 6,alberto,12-09-1997,algorta,678364477
+[RES] Paciente modificado.
+[REQ] BUSCAR_PACIENTE 6
+[RES] [Paciente] ID: 6, Nombre: alberto, Fecha de nacimiento: 12-09-1997, Direccion: algorta, Telefono: 678364477[REQ] ELIMINAR_PACIENTE 3
+[RES] Paciente eliminado.
+[REQ] LISTAR_PACIENTES
+[RES] [Paciente] ID: 5, Nombre: juan, Fecha de nacimiento: 06/08/2006, Direccion: santander, Telefono: 890236891
+[Paciente] ID: 6, Nombre: alberto, Fecha de nacimiento: 12-09-1997, Direccion: algorta, Telefono: 678364477
+[Paciente] ID: 7, Nombre: jonka, Fecha de nacimiento: 01/04/2005, Direccion: los fueros, Telefono: 78964939
+[Paciente] ID: 9, Nombre: pablo, Fecha de nacimiento: 26-09-1995, Direccion: abatxolo, Telefono: 689532263
+[Paciente] ID: 10, Nombre: aimar, Fecha de nacimiento: 14-06-2005, Direccion: ihurraldea 8, Telefono: 648947105
+[REQ] ANADIR_CITA 6,09-12-2026,58013746,pendiente
+[RES] Cita agregada con éxito.
+[REQ] ANADIR_CITA 9,07-07-2025,pendiente
+[INIT] Servidor arrancado
+[REQ] LOGIN|prueba|0000
+[REQ] ANADIR_CITA 9,09-07-2025,33333333,pendiente
+[RES] Cita agregada con éxito.
+[REQ] CONSULTAR_CITAS_PACIENTE 9
+[RES] ID: 8, Paciente: 9, Fecha: 09-07-2025, Médico: 33333333, Estado: pendiente
+[REQ] CONSULTAR_CITAS_PACIENTE 6
+[RES] ID: 5, Paciente: 6, Fecha: 07-08-2025, Médico: 88888888, Estado: pendiente
+ID: 7, Paciente: 6, Fecha: 09-12-2026, Médico: 58013746, Estado: pendiente
+[REQ] CONSULTAR_CITAS_MEDICO 33333333
+[RES] ID: 8, Paciente: 9, Fecha: 09-07-2025, Médico: 33333333, Estado: pendiente
+[REQ] CONSULTAR_CITAS_MEDICO 88888888
+[RES] ID: 5, Paciente: 6, Fecha: 07-08-2025, Médico: 88888888, Estado: pendiente
+ID: 6, Paciente: 3, Fecha: 12-07-2025, Médico: 88888888, Estado: pendiente
+[REQ] MODIFICAR_CITA 5,07-10-2025,pendiente
+[RES] Cita modificada con éxito.
+[REQ] CONSULTAR_CITAS_PACIENTE 6
+[RES] ID: 5, Paciente: 6, Fecha: 07-10-2025, Médico: 88888888, Estado: pendiente
+ID: 7, Paciente: 6, Fecha: 09-12-2026, Médico: 58013746, Estado: pendiente
+[REQ] MODIFICAR_CITA 5,07-10-2025,pendiente,58013746
+[RES] Cita modificada con éxito.
+[REQ] CONSULTAR_CITAS_PACIENTE 6
+[RES] ID: 5, Paciente: 6, Fecha: 07-10-2025, Médico: 58013746, Estado: pendiente
+ID: 7, Paciente: 6, Fecha: 09-12-2026, Médico: 58013746, Estado: pendiente
+[REQ] ELIMINAR_CITA 7
+[RES] Cita eliminada con éxito.
+[REQ] CONSULTAR_CITAS_MEDICO 58013746
+[RES] ID: 3, Paciente: 3, Fecha: 10-10-10, Médico: 58013746, Estado: pendiente
+ID: 4, Paciente: 5, Fecha: 10-10-10, Médico: 58013746, Estado: pendiente
+ID: 5, Paciente: 6, Fecha: 07-10-2025, Médico: 58013746, Estado: pendiente
+[REQ] CONSULTAR_HISTORIAL 4
+[RES] No se encontraron historiales.[REQ] ANADIR_HISTORIAL 4,tuberculosis
+[RES] Error al añadir historial. No se ha conectado correctamente, o el paciente no existe.
+[REQ] CONSULTAR_HISTORIAL 5
+[RES] ID: 8, Paciente ID: 5, Nombre: juan, Antecedente: sida
+[REQ] MODIFICAR_HISTORIAL 8,5,sindrome de tourette
+[RES] Historial modificado con éxito.
+[REQ] CONSULTAR_HISTORIAL 5
+[RES] ID: 8, Paciente ID: 5, Nombre: juan, Antecedente: sindrome de tourette
+[REQ] ANADIR_HISTORIAL 9
+[RES] Error en formato de datos para agregar historial: Error: Número de campos inválido. Se esperaban 2 o 3 campos.
+[REQ] ANADIR_HISTORIAL 9,operacion cadera
+[RES] Error al añadir historial. No se ha conectado correctamente, o el paciente no existe.
+[REQ] CONSULTAR_HISTORIAL 9
+[RES] ID: 6, Paciente ID: 9, Nombre: pablo, Antecedente: prueba
+[REQ] ELIMINAR_HISTORIAL 6
+[RES] Historial eliminado con éxito.
+[REQ] CONSULTAR_HISTORIAL 9
+[RES] No se encontraron historiales.[REQ] ANADIR_HISTORIAL 9,operacion cadera
+[RES] Historial añadido con éxito.
+[REQ] CONSULTAR_HISTORIAL 9
+[RES] ID: 9, Paciente ID: 9, Nombre: pablo, Antecedente: operacion cadera
+[REQ] SALIR

@@ -18,8 +18,6 @@ Command parseCommand(const std::string& line) {
     auto f = splitFields(line);
     if (f.empty()) return CMD_UNKNOWN;
     if (f[0]=="LOGIN")                return CMD_LOGIN;
-    if (f[0]=="CONSULTA_HISTORIAL")   return CMD_CONSULTA_HISTORIAL;
-    if (f[0]=="AGREGAR_HISTORIAL")    return CMD_AGREGAR_HISTORIAL;
     if (f[0]=="SALIR")                return CMD_SALIR;
     return CMD_UNKNOWN;
 }
@@ -28,8 +26,6 @@ std::string formatRequest(Command cmd, const std::vector<std::string>& params) {
     std::string s;
     switch (cmd) {
         case CMD_LOGIN:               s = "LOGIN"; break;
-        case CMD_CONSULTA_HISTORIAL:  s = "CONSULTA_HISTORIAL"; break;
-        case CMD_AGREGAR_HISTORIAL:   s = "AGREGAR_HISTORIAL"; break;
         case CMD_SALIR:               s = "SALIR"; break;
         default:                      s = "UNKNOWN"; break;
     }

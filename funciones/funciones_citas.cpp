@@ -94,7 +94,7 @@ string consultarCitasPorPaciente(const string& id_str) {
             result += "ID: "      + to_string(sqlite3_column_int(stmt, 0)) +
                       ", Paciente: " + to_string(sqlite3_column_int(stmt, 1)) +
                       ", Fecha: "  + string(reinterpret_cast<const char*>(sqlite3_column_text(stmt, 2))) +
-                      ", Médico: " + to_string(sqlite3_column_int(stmt, 3)) +
+                      ", Medico: " + to_string(sqlite3_column_int(stmt, 3)) +
                       ", Estado: " + string(reinterpret_cast<const char*>(sqlite3_column_text(stmt, 4))) +
                       "\n";
         }

@@ -4,8 +4,6 @@
 
 enum Command {
     CMD_LOGIN,
-    CMD_CONSULTA_HISTORIAL,
-    CMD_AGREGAR_HISTORIAL,
     CMD_SALIR,
     CMD_UNKNOWN
 };

@@ -135,28 +135,6 @@ std::ofstream srvLog("server.log", std::ios::app);
             Command cmd = parseCommand(req);
             switch (cmd) {
 
-                case CMD_CONSULTA_HISTORIAL: {
-                    auto fields = splitFields(req);
-                    int id = std::stoi(fields[1]);
-                    char *datos = hospital_consultar_historial(id);
-                    response = "OK|" + std::string(datos);
-                    free(datos);
-                    break;
-                }
-                case CMD_AGREGAR_HISTORIAL: {
-                    auto f = splitFields(req);
-                    if (f.size() < 3) {
-                        response = "ERR|Parametros insuficientes para AGREGAR_HISTORIAL\n";
-                        break;
-                    }
-                    int id = std::stoi(f[1]);
-                    const char *ante = f[2].c_str();
-                    int rc = hospital_agregar_historial(id, ante);
-                    response = (rc == 0)
-                        ? "OK|Historial agregado\n"
-                        : "ERR|No se pudo agregar historial\n";
-                    break;
-                }
                 case CMD_SALIR:
                     response = "OK|Adios\n";
                     send(clientSock, response.c_str(), (int)response.size(), 0);
