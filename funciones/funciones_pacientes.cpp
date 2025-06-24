@@ -168,25 +168,38 @@ string modificarPaciente(const string& datos) {
 }
 
 string eliminarPaciente(const string& id_str) {
-    sqlite3* db = abrirBaseDeDatos();
-    if (!db) return "Error al abrir la base de datos.";
-
-    string query = "DELETE FROM paciente WHERE id=?;";
-    sqlite3_stmt* stmt;
-
-    if (sqlite3_prepare_v2(db, query.c_str(), -1, &stmt, nullptr) == SQLITE_OK) {
-        sqlite3_bind_int(stmt, 1, stoi(id_str));
-        if (sqlite3_step(stmt) == SQLITE_DONE) {
-            sqlite3_finalize(stmt);
-            sqlite3_close(db);
-            return "Paciente eliminado.\n";
+sqlite3* db = abrirBaseDeDatos();
+    if (!db) return "Error al abrir la base de datos.\n";
+    {
+        sqlite3_stmt* stmtC = nullptr;
+        const char* sqlC = "DELETE FROM Cita WHERE paciente_id = ?;";
+        if (sqlite3_prepare_v2(db, sqlC, -1, &stmtC, nullptr) == SQLITE_OK) {
+            sqlite3_bind_int(stmtC, 1, stoi(id_str));
+            sqlite3_step(stmtC);
+            sqlite3_finalize(stmtC);
         }
     }
-
-    sqlite3_finalize(stmt);
+    {
+        sqlite3_stmt* stmtH = nullptr;
+        const char* sqlH = "DELETE FROM HistClinica WHERE paciente_id = ?;";
+        if (sqlite3_prepare_v2(db, sqlH, -1, &stmtH, nullptr) == SQLITE_OK) {
+            sqlite3_bind_int(stmtH, 1, stoi(id_str));
+            sqlite3_step(stmtH);
+            sqlite3_finalize(stmtH);
+        }
+    }
+    // 3) Finalmente borrar el registro del paciente
+    sqlite3_stmt* stmtP = nullptr;
+    const char* sqlP = "DELETE FROM Paciente WHERE id = ?;";
+    sqlite3_prepare_v2(db, sqlP, -1, &stmtP, nullptr);
+    sqlite3_bind_int(stmtP, 1, stoi(id_str));
+    sqlite3_step(stmtP);
+    sqlite3_finalize(stmtP);
     sqlite3_close(db);
-    return "Error al eliminar paciente.\n";
+
+    return "Paciente eliminado con éxito.\n";
 }
+//sqlite3_bind_int(stmt, 1, stoi(id_str));
 
 string procesarComandoPacientes(const string& entrada) {
     istringstream iss(entrada);
