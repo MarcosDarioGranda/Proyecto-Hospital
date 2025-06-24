@@ -30,7 +30,7 @@ static sqlite3* abrirBaseDeDatos() {
 //implementada con oo
 string listarPacientes() {
     sqlite3* db;
-    if (sqlite3_open("BD_HOSPITAL", &db) != SQLITE_OK) {
+    if (sqlite3_open(DB_PATH, &db) != SQLITE_OK) {
         return "Error al abrir la base de datos.";
     }
 

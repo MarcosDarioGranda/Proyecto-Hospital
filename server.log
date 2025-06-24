@@ -589,3 +589,97 @@
 [REQ] CONSULTAR_CITAS_PACIENTE 4
 [RES] Paciente no encontrado.
 [REQ] SALIR
+[INIT] Servidor arrancado
+[REQ] LOGIN|aimar|3210
+[REQ] LISTAR_PACIENTES
+[RES] [Paciente] ID: 3, Nombre: lol, Fecha de nacimiento: 1111-11-11, Direccion: asfsdasdasd, Telefono: 29292929
+[Paciente] ID: 5, Nombre: juan, Fecha de nacimiento: 06/08/2006, Direccion: santander, Telefono: 890236891
+[Paciente] ID: 6, Nombre: aa, Fecha de nacimiento: naaa, Direccion: asadsasd, Telefono: 19191919
+[Paciente] ID: 7, Nombre: jonka, Fecha de nacimiento: 01/04/2005, Direccion: los fueros, Telefono: 78964939
+[REQ] BUSCAR_PACIENTE 6
+[RES] [Paciente] ID: 6, Nombre: aa, Fecha de nacimiento: naaa, Direccion: asadsasd, Telefono: 19191919[REQ] ANADIR_PACIENTE pablo,12-06-2000,abatxolo,7840192649
+[RES] Comando no reconocido
+[REQ] MODIFICAR_PACIENTE 6,pablo,12-09-1997,abatxolo,678263017
+[RES] Paciente modificado.
+[REQ] BUSCAR_PACIENTE 6
+[RES] [Paciente] ID: 6, Nombre: pablo, Fecha de nacimiento: 12-09-1997, Direccion: abatxolo, Telefono: 678263017[REQ] CONSULTAR_CITAS_PACIENTE 3
+[RES] ID: 3, Paciente: 3, Fecha: 10-10-10, Médico: 58013746, Estado: pendiente
+[REQ] CONSULTAR_CITAS_MEDICO 58013746
+[RES] ID: 3, Paciente: 3, Fecha: 10-10-10, Médico: 58013746, Estado: pendiente
+ID: 4, Paciente: 5, Fecha: 10-10-10, Médico: 58013746, Estado: pendiente
+[REQ] ANADIR_CITA 6,07-08-2025,88888888,pendiente
+[RES] Cita agregada con éxito.
+[REQ] CONSULTAR_CITAS_PACIENTE 6
+[RES] ID: 5, Paciente: 6, Fecha: 07-08-2025, Médico: 88888888, Estado: pendiente
+[REQ] ANADIR_CITA 3,05-06-2025,88888888,pospuesta
+[RES] Cita agregada con éxito.
+[REQ] CONSULTAR_CITAS_MEDICO 88888888
+[RES] ID: 5, Paciente: 6, Fecha: 07-08-2025, Médico: 88888888, Estado: pendiente
+ID: 6, Paciente: 3, Fecha: 05-06-2025, Médico: 88888888, Estado: pospuesta
+[REQ] MODIFICAR_CITA 6,10-07,2025,pendiente,88888888
+[RES] Error al parsear los datos: Formato incorrecto para modificar cita
+[REQ] MODIFICAR_CITA 6,10-07,2025,pendiente
+[RES] Error al parsear los datos: stoi
+[INIT] Servidor arrancado
+[REQ] LOGIN|prueba|0000
+[REQ] CONSULTAR_CITAS_PACIENTE 6
+[RES] ID: 5, Paciente: 6, Fecha: 07-08-2025, Médico: 88888888, Estado: pendiente
+[REQ] CONSULTAR_CITAS_MEDICO 88888888
+[RES] ID: 5, Paciente: 6, Fecha: 07-08-2025, Médico: 88888888, Estado: pendiente
+ID: 6, Paciente: 3, Fecha: 05-06-2025, Médico: 88888888, Estado: pospuesta
+[REQ] MODIFICAR_CITA 6,12-07-2025,pendiente,88888888
+[RES] Cita modificada con éxito.
+[REQ] CONSULTAR_CITAS_MEDICO 88888888
+[RES] ID: 5, Paciente: 6, Fecha: 07-08-2025, Médico: 88888888, Estado: pendiente
+ID: 6, Paciente: 3, Fecha: 12-07-2025, Médico: 88888888, Estado: pendiente
+[REQ] ANADIR_CITA 3,08-03-2026,88888888,pendiente
+[RES] Cita agregada con éxito.
+[REQ] CONSULTAR_CITAS_MEDICO 88888888
+[RES] ID: 5, Paciente: 6, Fecha: 07-08-2025, Médico: 88888888, Estado: pendiente
+ID: 6, Paciente: 3, Fecha: 12-07-2025, Médico: 88888888, Estado: pendiente
+ID: 7, Paciente: 3, Fecha: 08-03-2026, Médico: 88888888, Estado: pendiente
+[REQ] ELIMINAR_CITA 7
+[RES] Cita eliminada con éxito.
+[REQ] CONSULTAR_CITAS_MEDICO 88888888
+[RES] ID: 5, Paciente: 6, Fecha: 07-08-2025, Médico: 88888888, Estado: pendiente
+ID: 6, Paciente: 3, Fecha: 12-07-2025, Médico: 88888888, Estado: pendiente
+[REQ] CONSULTAR_HISTORIAL 7
+[RES] No se encontraron historiales.[REQ] ANADIR_HISTORIAL 7,operacion menisco
+[RES] Historial añadido con éxito.
+[REQ] CONSULTAR_HISTORIAL 7
+[RES] ID: 9, Paciente ID: 7, Nombre: jonka, Antecedente: operacion menisco
+[REQ] ANADIR_HISTORIAL 7,hombro salido
+[RES] Error al añadir historial. No se ha conectado correctamente, o el paciente no existe.
+[REQ] CONSULTAR_HISTORIAL 7
+[RES] ID: 9, Paciente ID: 7, Nombre: jonka, Antecedente: operacion menisco
+[REQ] ANADIR_HISTORIAL 7,hombro salido
+[RES] Error al añadir historial. No se ha conectado correctamente, o el paciente no existe.
+[REQ] ANADIR_HISTORIAL 6,alopecia
+[RES] Error al añadir historial. No se ha conectado correctamente, o el paciente no existe.
+[REQ] MODIFICAR_HISTORIAL 9,7,alopecia
+[RES] Historial modificado con éxito.
+[REQ] CONSULTAR_HISTORIAL 7
+[RES] ID: 9, Paciente ID: 7, Nombre: jonka, Antecedente: alopecia
+[REQ] ANADIR_HISTORIAL 3,alergia acaros
+[RES] Error al añadir historial. No se ha conectado correctamente, o el paciente no existe.
+[REQ] SALIR
+[INIT] Servidor arrancado
+[REQ] LOGIN|prueba|0000
+[REQ] ANADIR_HISTORIAL 3,alergia acaros
+[RES] Error al añadir historial. No se ha conectado correctamente, o el paciente no existe.
+[REQ] CONSULTAR_HISTORIAL 7
+[RES] ID: 9, Paciente ID: 7, Nombre: jonka, Antecedente: alopecia
+[REQ] MODIFICAR_HISTORIAL 9,7,hombro salido
+[RES] Historial modificado con éxito.
+[REQ] CONSULTAR_HISTORIAL 7
+[RES] ID: 9, Paciente ID: 7, Nombre: jonka, Antecedente: hombro salido
+[REQ] ELIMINAR_HISTORIAL 9
+[RES] Historial eliminado con éxito.
+[REQ] CONSULTAR_HISTORIAL 7
+[RES] No se encontraron historiales.[REQ] CONSULTAR_HISTORIAL 3
+[RES] ID: 7, Paciente ID: 3, Nombre: lol, Antecedente: alopecia
+[REQ] ANADIR_HISTORIAL 3,operacion tendon aquiles
+[RES] Error al añadir historial. No se ha conectado correctamente, o el paciente no existe.
+[REQ] CONSULTAR_HISTORIAL 3
+[RES] ID: 7, Paciente ID: 3, Nombre: lol, Antecedente: alopecia
+[REQ] SALIR
