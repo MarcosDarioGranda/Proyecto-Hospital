@@ -23,8 +23,8 @@ string recibirRespuesta(int socket) {
 void mostrarMenuPacientes(int socket) {
     int opcion;
     do {
-        cout << "\n--- Menu Pacientes ---\n";
-        cout << "1. Ver lista de pacientes\n";
+        cout << "\n---- Menu Pacientes ----\n";
+        cout << "\n1. Ver lista de pacientes\n";
         cout << "2. Buscar paciente por ID\n";
         cout << "3. Anyadir nuevo paciente\n";
         cout << "4. Modificar paciente existente\n";
@@ -79,8 +79,8 @@ void mostrarMenuCitas(int socket) {
     int opcion;
     string input, comando;
     do {
-        cout << "\n--- Menu de Citas ---\n";
-        cout << "1. Ver citas por paciente\n";
+        cout << "\n---- Menu de Citas ----\n";
+        cout << "\n1. Ver citas por paciente\n";
         cout << "2. Ver citas por medico\n";
         cout << "3. Anyadir nueva cita\n";
         cout << "4. Modificar cita existente\n";
@@ -136,8 +136,8 @@ void mostrarMenuHistorial(int socket) {
     int opcion;
     string input, comando;
     do {
-        cout << "\n--- Menu de Historial Médico ---\n";
-        cout << "1. Consultar historial de paciente\n";
+        cout << "\n---- Menu de Historial Medico ----\n";
+        cout << "\n1. Consultar historial de paciente\n";
         cout << "2. Anyadir historial medico\n";
         cout << "3. Modificar historial medico\n";
         cout << "4. Eliminar historial medico\n";

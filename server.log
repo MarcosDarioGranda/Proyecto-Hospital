@@ -720,3 +720,15 @@ ID: 6, Paciente: 3, Fecha: 12-07-2025, Médico: 88888888, Estado: pendiente
 [Paciente] ID: 7, Nombre: jonka, Fecha de nacimiento: 01/04/2005, Direccion: los fueros, Telefono: 78964939
 [Paciente] ID: 9, Nombre: pablo, Fecha de nacimiento: 26-09-1995, Direccion: abatxolo, Telefono: 689532263
 [REQ] SALIR
+[INIT] Servidor arrancado
+[REQ] LOGIN|prueba|0000
+[REQ] SALIR
+[INIT] Servidor arrancado
+[REQ] LOGIN|prueba|0000
+[REQ] SALIR
+[INIT] Servidor arrancado
+[REQ] LOGIN|prueba|0000
+[REQ] SALIR
+[INIT] Servidor arrancado
+[REQ] LOGIN|prueba|0000
+[REQ] SALIR

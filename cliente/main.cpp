@@ -101,17 +101,18 @@ int main() {
 
     bool salir = false;
     while (!salir) {
-        cout << "\n1) Consultar historial"
-         << "\n2) Agregar historial"
-         << "\n3) Gestion de pacientes"
-         << "\n4) Gestion de citas"
-         << "\n5) Gestion de historial"
-         << "\n6) Salir\n> ";
+        cout <<"\n ---- MENU PRINCIPAL ----\n"
+         << "\n1) Gestion de Pacientes"
+         << "\n2) Gestion de Citas"
+         << "\n3) Gestion de Historial"
+         << "\n4) Salir y Cerrar Sesion\n"
+         << "Seleccione una opcion: ";
         int opcion; cin >> opcion;
         cin.ignore();
 
         string request;
         switch (opcion) {
+            /*
             case 1: {
                 int id;
                 cout << "ID Paciente: ";
@@ -162,16 +163,17 @@ int main() {
                 cout << "Respuesta: " << recvbuf;
                 break;
             }
-            case 3:
+            */
+            case 1:
                 mostrarMenuPacientes(connSock);
                 break;
-            case 4:
+            case 2:
                 mostrarMenuCitas(connSock);
                 break;
-            case 5:
+            case 3:
                 mostrarMenuHistorial(connSock);
                 break;
-            case 6:
+            case 4:
                 request = formatRequest(CMD_SALIR, {});
                 send(connSock, request.c_str(), (int)request.size(), 0);
                 salir = true;
